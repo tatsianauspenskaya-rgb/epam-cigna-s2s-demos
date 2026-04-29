@@ -1,0 +1,593 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cb:#0080C9;--cbd:#005f96;--cbl:#e6f4fb;
+  --cg:#52BB40;--cgd:#3a8a2d;--cgl:#eaf7e6;
+  --co:#FA9800;--col:#fff3e0;
+  --cn:#003865;--ct:#1a2b3c;--cm:#5a6e82;
+  --cborder:#cce0f0;--cbg:#f4f8fc;
+  --cr:#c0392b;--crl:#fdf0ee;--cwo:#e67e00;--cwl:#fff8ed;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ct);background:var(--cbg)}
+.nav{background:var(--cn);padding:0 16px;display:flex;align-items:stretch}
+.nav-brand{display:flex;align-items:center;gap:10px;padding:12px 16px 12px 0;border-right:1px solid rgba(255,255,255,.15);margin-right:8px}
+.nav-logo{width:32px;height:32px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:26px;height:26px}
+.nav-wordmark{font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px}
+.nav-wordmark span{color:var(--cg);font-weight:400;font-size:11px;display:block;letter-spacing:.3px;margin-top:-2px}
+.nav-tab{padding:0 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;border-bottom:3px solid transparent;transition:all .15s}
+.nav-tab:hover{color:#fff}
+.nav-tab.active{color:#fff;border-bottom-color:var(--cg)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6)}
+.nav-badge{background:var(--cg);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.subheader{background:var(--cb);padding:10px 16px;display:flex;align-items:center;gap:12px}
+.subheader-title{font-size:13px;font-weight:600;color:#fff}
+.subheader-sep{color:rgba(255,255,255,.4)}
+.subheader-sub{font-size:12px;color:rgba(255,255,255,.8)}
+.subheader-pill{background:rgba(255,255,255,.15);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:auto}
+.pipeline-wrap{background:#fff;border-bottom:1px solid var(--cborder);padding:12px 16px}
+.case-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.case-tab{background:var(--cbg);border:1px solid var(--cborder);border-radius:16px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--cm)}
+.case-tab.active{background:var(--cbl);border-color:var(--cb);color:var(--cbd);font-weight:600}
+.pipeline{display:flex;align-items:center}
+.p-step{flex:1;padding:8px 10px;border:1px solid var(--cborder);background:var(--cbg);cursor:pointer;text-align:center}
+.p-step:first-child{border-radius:8px 0 0 8px}
+.p-step:last-child{border-radius:0 8px 8px 0}
+.p-step+.p-step{border-left:none}
+.p-step.done{background:var(--cgl);border-color:var(--cg)}
+.p-step.active{background:var(--cbl);border-color:var(--cb);border-width:1.5px}
+.p-step.mock{opacity:.65}
+.p-num{font-size:10px;color:var(--cm);margin-bottom:2px}
+.p-name{font-size:11px;font-weight:600;color:var(--ct)}
+.p-badge{font-size:9px;padding:2px 5px;border-radius:8px;margin-top:3px;display:inline-block}
+.pb-done{background:var(--cgl);color:var(--cgd)}
+.pb-running{background:var(--cbl);color:var(--cbd)}
+.pb-mock{background:#efefef;color:#888}
+.pb-pending{background:#f0f0f0;color:#888}
+.stage-tabs{display:flex;border-bottom:2px solid var(--cborder);background:#fff;padding:0 16px}
+.stage-tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--cm);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.stage-tab.active{color:var(--cb);border-bottom-color:var(--cb);font-weight:600}
+.stage-tab.done-tab{color:var(--cgd)}
+.happy-banner{background:var(--cgl);border-left:4px solid var(--cg);border-radius:0 6px 6px 0;padding:10px 14px;margin:12px 16px 0;display:flex;align-items:flex-start;gap:10px}
+.happy-icon{width:22px;height:22px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px}
+.happy-title{font-size:12px;font-weight:700;color:var(--cgd);margin-bottom:3px}
+.happy-desc{font-size:11px;color:var(--cgd);line-height:1.6}
+.main{display:grid;grid-template-columns:1fr 300px;gap:12px;padding:12px 16px}
+.feed{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.feed-header{background:var(--cn);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.feed-header-title{font-size:12px;font-weight:600;color:#fff}
+.feed-header-status{font-size:11px;color:rgba(255,255,255,.65);margin-left:auto}
+.spinner{width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.feed-body{padding:12px 14px}
+.feed-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0f5fa;align-items:flex-start}
+.feed-item:last-child{border-bottom:none}
+.fi-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dot-g{background:var(--cg)}.dot-b{background:var(--cb)}.dot-o{background:var(--co)}
+.fi-text{font-size:12px;color:var(--ct);line-height:1.5}
+.fi-meta{font-size:10px;color:var(--cm);margin-top:2px}
+.fi-expand{font-size:11px;color:var(--cb);background:none;border:none;cursor:pointer;padding:2px 0;margin-top:3px;display:block}
+.fi-expand:hover{text-decoration:underline}
+.fi-data{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:3px 16px}
+.fi-kv-k{color:var(--cm)}.fi-kv-v{font-weight:600;color:var(--ct)}
+.fi-list{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px}
+.fi-list-item{padding:4px 0;border-bottom:1px solid var(--cborder);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fi-list-item:last-child{border-bottom:none}
+.fi-file{font-family:monospace;font-size:10px;color:var(--cb);background:var(--cbl);padding:2px 6px;border-radius:4px;white-space:nowrap}
+.tag-g{background:var(--cgl);color:var(--cgd);font-size:10px;padding:1px 6px;border-radius:8px;font-weight:600}
+.success-banner{background:var(--cgl);border:1px solid var(--cg);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-top:8px}
+.success-icon{width:20px;height:20px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.success-text{font-size:12px;color:var(--cgd);font-weight:500;line-height:1.4}
+.sidebar{display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.card-hd{background:var(--cb);padding:8px 12px;font-size:12px;font-weight:600;color:#fff}
+.card-body{padding:10px 12px}
+.kv{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f5fa}
+.kv:last-child{border-bottom:none}
+.kv-k{color:var(--cm)}.kv-v{font-weight:600;color:var(--ct);text-align:right}.kv-v-g{font-weight:600;color:var(--cgd);text-align:right}
+.kv-file{font-family:monospace;font-size:10px;color:var(--cb);background:var(--cbl);padding:1px 5px;border-radius:3px}
+.next-card{background:var(--cgl);border:1.5px solid var(--cg);border-radius:8px;overflow:hidden}
+.next-hd{background:var(--cg);padding:8px 12px}
+.next-hd-txt{font-size:12px;font-weight:700;color:#fff}
+.next-body{padding:10px 12px}
+.next-desc{font-size:11px;color:var(--cgd);line-height:1.5}
+/* rules page */
+.rules-wrap{padding:12px 16px}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rule-input-card,.rule-results{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.ri-hd{background:var(--cn);padding:10px 14px;font-size:12px;font-weight:600;color:#fff}
+.ri-body{padding:12px 14px}
+.form-row{margin-bottom:10px}
+.form-label{font-size:11px;font-weight:600;color:var(--cm);margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.5px}
+.form-select,.form-input{width:100%;padding:7px 10px;font-size:12px;border:1px solid var(--cborder);border-radius:6px;color:var(--ct);background:#fff;outline:none}
+.form-select:focus,.form-input:focus{border-color:var(--cb)}
+.form-textarea{width:100%;padding:7px 10px;font-size:12px;border:1px solid var(--cborder);border-radius:6px;color:var(--ct);height:68px;resize:none;outline:none;font-family:inherit}
+.btn-run{background:var(--cb);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:600;padding:8px 20px;cursor:pointer;width:100%}
+.rr-hd{background:var(--cb);padding:10px 14px;font-size:12px;font-weight:600;color:#fff;display:flex;gap:8px;align-items:center}
+.rr-body{padding:12px 14px}
+.rule-trace-item{padding:8px 10px;border-radius:6px;margin-bottom:6px;font-size:11px;line-height:1.5}
+.rt-pass{background:var(--cgl);border-left:3px solid var(--cg)}
+.rt-fail{background:var(--crl);border-left:3px solid var(--cr)}
+.rt-warn{background:var(--cwl);border-left:3px solid var(--co)}
+.rt-label{font-weight:700;margin-bottom:2px}.rt-detail{color:var(--cm)}
+.rule-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cbg);border:1px solid var(--cborder);border-radius:16px;padding:3px 10px;font-size:11px;margin:3px;cursor:pointer;color:var(--ct)}
+.rule-chip:hover{border-color:var(--cb);color:var(--cb)}
+.rule-chip-dot{width:7px;height:7px;border-radius:50%}
+</style>
+
+<div>
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="9" r="5" fill="#0080C9"/>
+        <rect x="13.5" y="13" width="5" height="11" rx="2" fill="#0080C9"/>
+        <ellipse cx="10" cy="10" rx="4" ry="2.2" fill="#52BB40" transform="rotate(-35 10 10)"/>
+        <ellipse cx="22" cy="10" rx="4" ry="2.2" fill="#52BB40" transform="rotate(35 22 10)"/>
+        <ellipse cx="16" cy="7" rx="4.5" ry="1.8" fill="#52BB40"/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">Cigna <span>S2S Agentic Platform</span></div>
+  </div>
+  <div class="nav-tab active" id="tab-pipeline" onclick="showPage('pipeline')">Pipeline</div>
+  <div class="nav-tab" id="tab-rules" onclick="showPage('rules')">Rules executor</div>
+  <div class="nav-tab" id="tab-audit">Audit log</div>
+  <div class="nav-tab" id="tab-settings">Settings</div>
+  <div class="nav-right"><span>U500 · Medical</span><span class="nav-badge">LIVE POC</span></div>
+</div>
+
+<!-- ═══ PIPELINE PAGE ═══ -->
+<div id="page-pipeline">
+<div class="subheader">
+  <span class="subheader-title">Sale-to-Setup orchestration</span>
+  <span class="subheader-sep">/</span>
+  <span class="subheader-sub">Active cases: 4</span>
+  <span class="subheader-pill">Facets track · Pre-sale scope</span>
+</div>
+<div class="pipeline-wrap">
+  <div class="case-tabs">
+    <span class="case-tab active">Plans &amp; Specs LLC</span>
+    <span class="case-tab">C&amp;W Pizza LLC</span>
+    <span class="case-tab">Atlantic Coast Mortgage</span>
+    <span class="case-tab">OSS Tactical LLC</span>
+    <span class="case-tab" style="border-style:dashed">+ new case</span>
+  </div>
+  <div class="pipeline">
+    <div class="p-step done mock" onclick="showStage('s2')"><div class="p-num">01</div><div class="p-name">RFP intake</div><span class="p-badge pb-mock">mocked</span></div>
+    <div class="p-step done" onclick="showStage('s2')"><div class="p-num">02</div><div class="p-name">Initial proposal</div><span class="p-badge pb-done">complete</span></div>
+    <div class="p-step done mock" onclick="showStage('s3')"><div class="p-num">03</div><div class="p-name">Sales negotiation</div><span class="p-badge pb-mock">mocked</span></div>
+    <div class="p-step active" onclick="showStage('s4')"><div class="p-num">04</div><div class="p-name">Client intent</div><span class="p-badge pb-running">running</span></div>
+    <div class="p-step" onclick="showStage('s5')"><div class="p-num">05</div><div class="p-name">Install</div><span class="p-badge pb-pending">pending</span></div>
+  </div>
+</div>
+<div class="stage-tabs">
+  <div class="stage-tab done-tab active" id="st2" onclick="showStage('s2')">02 · Initial proposal</div>
+  <div class="stage-tab done-tab" id="st3" onclick="showStage('s3')">03 · Sales negotiation</div>
+  <div class="stage-tab" id="st4" onclick="showStage('s4')">04 · Client intent</div>
+  <div class="stage-tab" id="st5" onclick="showStage('s5')">05 · Install</div>
+</div>
+
+<!-- ─── STAGE 2 ─── -->
+<div id="s2">
+<div class="happy-banner">
+  <div class="happy-icon">✓</div>
+  <div>
+    <div class="happy-title">Happy path — completed with no exceptions</div>
+    <div class="happy-desc">The UW Proposal Agent processed Plans &amp; Specs LLC (OP-10004316) end-to-end without any human intervention. RFP data was ingested from <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">RFP-2026-531.json</span>, census was loaded from <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">Census_File_RFP-2026-531.xlsx</span>, and all 5 IN situs compliance rules passed. Initial compliant quote generated automatically.</div>
+  </div>
+</div>
+<div class="main">
+  <div class="feed">
+    <div class="feed-header">
+      <span class="feed-header-title">Agent activity — stage 2: initial proposal creation</span>
+      <span class="feed-header-status">Complete · 09:02:18</span>
+    </div>
+    <div class="feed-body">
+
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text">RFP packet received — <strong>Plans &amp; Specs LLC</strong>. RFP ID <strong>RFP-2026-531</strong> parsed. Account <strong>OP-10004316</strong> created / updated in Salesforce.</div>
+        <div class="fi-list" style="margin-top:6px">
+          <div class="fi-list-item"><span>RFP source file</span><span class="fi-file">RFP-2026-531.json</span></div>
+          <div class="fi-list-item"><span>Opportunity file</span><span class="fi-file">Opportunity_OP-10004316.json</span></div>
+          <div class="fi-list-item"><span>Account file</span><span class="fi-file">Account_Details_OP-10004316.json</span></div>
+        </div>
+        <div class="fi-meta">09:01:04 · RFP intake agent (mocked)</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Census data loaded and analysed. 49 eligible employees. Incumbent carrier: <strong>Aetna</strong>. Funding: Traditional-Pooled/Block Rated.</div>
+        <button class="fi-expand" id="census-btn" onclick="toggleData('census-data','census-btn','Show census stats','Hide census stats')">Show census stats</button>
+        <div class="fi-data" id="census-data" style="display:none">
+          <span class="fi-kv-k">Source file</span><span class="fi-kv-v" style="font-family:monospace;font-size:10px">Census_File_RFP-2026-531.xlsx</span>
+          <span class="fi-kv-k">Sheet</span><span class="fi-kv-v">Master Census A</span>
+          <span class="fi-kv-k">Eligible employees</span><span class="fi-kv-v">49</span>
+          <span class="fi-kv-k">Participating</span><span class="fi-kv-v">49 (100%)</span>
+          <span class="fi-kv-k">Coverage tiers</span><span class="fi-kv-v">EE / ES / EC / EF</span>
+          <span class="fi-kv-k">Situs state</span><span class="fi-kv-v">IN (Indiana)</span>
+          <span class="fi-kv-k">Incumbent</span><span class="fi-kv-v">Aetna (primary)</span>
+          <span class="fi-kv-k">Segment</span><span class="fi-kv-v">Select · 2–49</span>
+        </div>
+        <div class="fi-meta">09:01:12 · UW proposal agent</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Product availability checked via Contour. Plan identified: <strong>Facets Open Access Plus (OAPIN)</strong>. Benefit plan ID <strong>38279253</strong>. Proposal <strong>UWP-2026-393-1</strong> created.</div>
+        <button class="fi-expand" id="plan-btn" onclick="toggleData('plan-data','plan-btn','Show plan details','Hide plan details')">Show plan details</button>
+        <div class="fi-data" id="plan-data" style="display:none">
+          <span class="fi-kv-k">Source files</span><span class="fi-kv-v" style="font-family:monospace;font-size:10px">OP-10004316_Proposal_dtls.csv</span>
+          <span class="fi-kv-k">Proposal ID</span><span class="fi-kv-v">UWP-2026-393-1</span>
+          <span class="fi-kv-k">Plan</span><span class="fi-kv-v">Facets Open Access Plus</span>
+          <span class="fi-kv-k">Plan code</span><span class="fi-kv-v">OAPIN</span>
+          <span class="fi-kv-k">Benefit plan ID</span><span class="fi-kv-v">38279253</span>
+          <span class="fi-kv-k">Funding type</span><span class="fi-kv-v">Traditional-Pooled</span>
+          <span class="fi-kv-k">Claims system</span><span class="fi-kv-v">Facets</span>
+          <span class="fi-kv-k">Packages</span><span class="fi-kv-v">Medical · Pharmacy · MHSA</span>
+        </div>
+        <div class="fi-meta">09:01:22 · UW proposal agent → Contour</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Rates calculated. Monthly premium total: <strong>$94,562.16</strong> across 49 subscribers (Tier 4 structure). EE rate: $1,284.81/mo.</div>
+        <button class="fi-expand" id="rates-btn" onclick="toggleData('rates-data','rates-btn','Show rate breakdown','Hide rate breakdown')">Show rate breakdown</button>
+        <div class="fi-data" id="rates-data" style="display:none">
+          <span class="fi-kv-k">Source file</span><span class="fi-kv-v" style="font-family:monospace;font-size:10px">OP-10004316_Proposal_Rates.csv</span>
+          <span class="fi-kv-k">Rate view file</span><span class="fi-kv-v" style="font-family:monospace;font-size:10px">Op-10004316_Proposal_rt_vw.csv</span>
+          <span class="fi-kv-k">Total subscribers</span><span class="fi-kv-v">49</span>
+          <span class="fi-kv-k">Monthly premium</span><span class="fi-kv-v">$94,562.16</span>
+          <span class="fi-kv-k">EE rate (PEPM)</span><span class="fi-kv-v">$1,284.81</span>
+          <span class="fi-kv-k">ES rate (PEPM)</span><span class="fi-kv-v">$2,698.11</span>
+          <span class="fi-kv-k">EC rate (PEPM)</span><span class="fi-kv-v">$2,441.14</span>
+          <span class="fi-kv-k">EF rate (PEPM)</span><span class="fi-kv-v">$3,854.44</span>
+        </div>
+        <div class="fi-meta">09:01:30 · UW proposal agent → Contour</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text">Eligibility confirmed. No exceptions found. Benefit plan attributes loaded from <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">Benefit_Plan_details.txt</span> — packages: Medical (Facets Copay/Coinsurance), Pharmacy (Enhanced), MHSA (Facets &amp; AIMS Combined).</div>
+        <div class="fi-meta">09:01:35 · UW proposal agent</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-o"></div><div>
+        <div class="fi-text">Shift Left rules check initiated. Situs state: <strong>IN (Indiana)</strong>. Validating proposal against PBAB — 2,000 compliance rules.</div>
+        <button class="fi-expand" onclick="showPage('rules')">Open rules executor</button>
+        <div class="fi-meta">09:01:44 · Rules agent → PBAB</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text">Compliance check complete. All rules passed. Initial compliant quote <strong>UWP-2026-393-1</strong> (Facets Open Access Plus, OAPIN) confirmed. MCP server notified — downstream systems updated.</div>
+        <div class="fi-meta">09:02:03 · Rules agent · Orchestration agent</div>
+      </div></div>
+
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text"><strong>Stage 2 complete.</strong> No exceptions or compliance flags raised. Proceeding to Sales negotiation (mocked).</div>
+        <div class="fi-meta">09:02:18 · Orchestration agent</div>
+        <div class="success-banner"><div class="success-icon">✓</div><div class="success-text">Happy path — no HITL required. Pipeline continuing automatically to stage 3.</div></div>
+      </div></div>
+
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="card"><div class="card-hd">Case summary — Plans &amp; Specs LLC</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Account</span><span class="kv-v">Plans &amp; Specs LLC</span></div>
+      <div class="kv"><span class="kv-k">Opportunity</span><span class="kv-v">OP-10004316</span></div>
+      <div class="kv"><span class="kv-k">Eligible employees</span><span class="kv-v">49</span></div>
+      <div class="kv"><span class="kv-k">Situs state</span><span class="kv-v">IN — Indiana</span></div>
+      <div class="kv"><span class="kv-k">Incumbent</span><span class="kv-v">Aetna (primary)</span></div>
+      <div class="kv"><span class="kv-k">Broker</span><span class="kv-v">Mike Daniel · Moss-Compton</span></div>
+      <div class="kv"><span class="kv-k">Commission</span><span class="kv-v">6%</span></div>
+      <div class="kv"><span class="kv-k">Effective date</span><span class="kv-v">01 Sep 2026</span></div>
+      <div class="kv"><span class="kv-k">Track</span><span class="kv-v">Facets · Select</span></div>
+    </div></div>
+    <div class="card"><div class="card-hd">Input files — stage 2</div><div class="card-body">
+      <div class="kv"><span class="kv-k">RFP</span><span class="kv-file">RFP-2026-531.json</span></div>
+      <div class="kv"><span class="kv-k">Census</span><span class="kv-file">Census_File_RFP-2026-531.xlsx</span></div>
+      <div class="kv"><span class="kv-k">Opportunity</span><span class="kv-file">Opportunity_OP-10004316.json</span></div>
+      <div class="kv"><span class="kv-k">Account</span><span class="kv-file">Account_Details_OP-10004316.json</span></div>
+      <div class="kv"><span class="kv-k">Benefit plan</span><span class="kv-file">Benefit_Plan_details.txt</span></div>
+    </div></div>
+    <div class="card"><div class="card-hd">Output files — stage 2</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Proposal</span><span class="kv-file">OP-10004316_Proposal_dtls.csv</span></div>
+      <div class="kv"><span class="kv-k">Rates</span><span class="kv-file">OP-10004316_Proposal_Rates.csv</span></div>
+      <div class="kv"><span class="kv-k">Rate view</span><span class="kv-file">Op-10004316_Proposal_rt_vw.csv</span></div>
+      <div class="kv"><span class="kv-k">Product view</span><span class="kv-file">OP-10004316_Proposal_Info1.csv</span></div>
+    </div></div>
+    <div class="card"><div class="card-hd">Compliance check — IN situs</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Mental health parity</span><span class="kv-v-g">pass</span></div>
+      <div class="kv"><span class="kv-k">Situs mandate IN</span><span class="kv-v-g">pass</span></div>
+      <div class="kv"><span class="kv-k">Preventive care</span><span class="kv-v-g">pass</span></div>
+      <div class="kv"><span class="kv-k">Small group limits</span><span class="kv-v-g">pass</span></div>
+      <div class="kv"><span class="kv-k">GLP-1 standard</span><span class="kv-v-g">pass</span></div>
+    </div></div>
+    <div class="next-card"><div class="next-hd"><span class="next-hd-txt">Next: Sales negotiation (stage 3)</span></div><div class="next-body"><div class="next-desc">All checks passed. Handing off to Palantir Negotiation Assistant. Iterative loop with broker Moss-Compton will be mocked.</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ─── STAGE 3 ─── -->
+<div id="s3" style="display:none">
+<div class="happy-banner">
+  <div class="happy-icon">✓</div>
+  <div>
+    <div class="happy-title">Happy path — completed with no exceptions</div>
+    <div class="happy-desc">Palantir Negotiation Assistant (mocked) resolved the broker loop for Plans &amp; Specs LLC. Facets Open Access Plus at a 6% discount was identified as the most-likely-to-sell quote. No discount threshold was breached — no HITL required. Benefit summary generated: <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">OP-10004316_Bensum_doc.pdf</span></div>
+  </div>
+</div>
+<div class="main">
+  <div class="feed">
+    <div class="feed-header">
+      <span class="feed-header-title">Agent activity — stage 3: sales negotiation (mocked)</span>
+      <span class="feed-header-status">Complete · 11:14:22</span>
+    </div>
+    <div class="feed-body">
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Proposal package transmitted to Palantir Negotiation Assistant. Quote <strong>UWP-2026-393-1</strong> and account data for <strong>OP-10004316</strong> handed off.</div>
+        <div class="fi-meta">09:02:20 · Orchestration agent → Palantir (mocked)</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-o"></div><div>
+        <div class="fi-text">Palantir negotiation in progress. Simulating underwriter ↔ broker (Moss-Compton) iterative loop. Estimated duration: ~2 hours.</div>
+        <div class="fi-meta">09:02:21 · Palantir Negotiation Assistant (mocked)</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Negotiation loop resolved. Most-likely-to-sell: <strong>Facets Open Access Plus (OAPIN)</strong> at 6% discount. Commission confirmed at 6% (broker: Moss-Compton). Final monthly premium: <strong>$88,888.43</strong>.</div>
+        <button class="fi-expand" id="neg-btn" onclick="toggleData('neg-data','neg-btn','Show negotiation outcome','Hide negotiation outcome')">Show negotiation outcome</button>
+        <div class="fi-data" id="neg-data" style="display:none">
+          <span class="fi-kv-k">Plan</span><span class="fi-kv-v">Facets OAP (OAPIN)</span>
+          <span class="fi-kv-k">Proposal ID</span><span class="fi-kv-v">UWP-2026-393-1</span>
+          <span class="fi-kv-k">Discount</span><span class="fi-kv-v">6%</span>
+          <span class="fi-kv-k">Final monthly prem</span><span class="fi-kv-v">$88,888.43</span>
+          <span class="fi-kv-k">Broker commission</span><span class="fi-kv-v">6% · Moss-Compton</span>
+          <span class="fi-kv-k">Caveat indicator</span><span class="fi-kv-v">Green</span>
+          <span class="fi-kv-k">Broker feedback</span><span class="fi-kv-v">Accepted</span>
+        </div>
+        <div class="fi-meta">11:14:18 · Palantir Negotiation Assistant (mocked)</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text">Benefit Summary generated and filed as <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">OP-10004316_Bensum_doc.pdf</span>. Final Compliant Quote confirmed. Proceeding to stage 4.</div>
+        <div class="fi-meta">11:14:22 · Orchestration agent</div>
+        <div class="success-banner"><div class="success-icon">✓</div><div class="success-text">Happy path — no HITL required. Final Compliant Quote locked. Proceeding automatically to stage 4.</div></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="card"><div class="card-hd">Final compliant quote</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Plan</span><span class="kv-v">Facets Open Access Plus</span></div>
+      <div class="kv"><span class="kv-k">Plan code</span><span class="kv-v">OAPIN</span></div>
+      <div class="kv"><span class="kv-k">Proposal ID</span><span class="kv-v">UWP-2026-393-1</span></div>
+      <div class="kv"><span class="kv-k">Monthly premium</span><span class="kv-v">$88,888.43</span></div>
+      <div class="kv"><span class="kv-k">Discount</span><span class="kv-v-g">6%</span></div>
+      <div class="kv"><span class="kv-k">Broker status</span><span class="kv-v-g">accepted</span></div>
+    </div></div>
+    <div class="card"><div class="card-hd">Output files — stage 3</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Benefit summary</span><span class="kv-file">OP-10004316_Bensum_doc.pdf</span></div>
+      <div class="kv"><span class="kv-k">Final proposal</span><span class="kv-file">OP-10004316_Proposal_dtls.csv</span></div>
+    </div></div>
+    <div class="next-card"><div class="next-hd"><span class="next-hd-txt">Next: Client intent (stage 4)</span></div><div class="next-body"><div class="next-desc">Final Compliant Quote locked. Client Intent agent now assembling NCQ, BenSum and BNCA package to produce the client record and ET plans.</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ─── STAGE 4 ─── -->
+<div id="s4" style="display:none">
+<div class="happy-banner">
+  <div class="happy-icon">✓</div>
+  <div>
+    <div class="happy-title">Happy path — no HITL triggered</div>
+    <div class="happy-desc">The Client Intent agent processed all inputs without exceptions. NCQ data loaded from <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">C&amp;W Pizza, LLC - Filled_NCQ.docx</span> as template reference. Client record assembled via <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">external-client-record-openapi-intent-only.json</span>. A human observer was notified but no approval was required.</div>
+  </div>
+</div>
+<div class="main">
+  <div class="feed">
+    <div class="feed-header">
+      <div class="spinner"></div>
+      <span class="feed-header-title">Agent activity — stage 4: client intent</span>
+      <span class="feed-header-status">11:17:44 · 1 agent active</span>
+    </div>
+    <div class="feed-body">
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text">Final Compliant Quote received from stage 3. NCQ data loaded. Client intent assembly starting for <strong>Plans &amp; Specs LLC</strong> (OP-10004316).</div>
+        <div class="fi-list" style="margin-top:6px">
+          <div class="fi-list-item"><span>NCQ template reference</span><span class="fi-file">C&amp;W Pizza, LLC - Filled_NCQ.docx</span></div>
+          <div class="fi-list-item"><span>Client record API spec</span><span class="fi-file">external-client-record-openapi-intent-only.json</span></div>
+        </div>
+        <div class="fi-meta">11:14:25 · Client intent agent</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Benefit Summary confirmed from stage 3 output. Covering Facets Open Access Plus plan for 49 lives, Tier 4 structure.</div>
+        <button class="fi-expand" id="bens-btn" onclick="toggleData('bens-data','bens-btn','Show benefit summary','Hide benefit summary')">Show benefit summary</button>
+        <div class="fi-data" id="bens-data" style="display:none">
+          <span class="fi-kv-k">Source file</span><span class="fi-kv-v" style="font-family:monospace;font-size:10px">OP-10004316_Bensum_doc.pdf</span>
+          <span class="fi-kv-k">Plan</span><span class="fi-kv-v">Facets Open Access Plus</span>
+          <span class="fi-kv-k">MH/SA Hospital IP coinsurance</span><span class="fi-kv-v">90% (IN)</span>
+          <span class="fi-kv-k">Pharmacy package</span><span class="fi-kv-v">Facets Enhanced</span>
+          <span class="fi-kv-k">MHSA package</span><span class="fi-kv-v">Facets &amp; AIMS Combined</span>
+          <span class="fi-kv-k">Medical package</span><span class="fi-kv-v">Facets Copay/Coinsurance</span>
+        </div>
+        <div class="fi-meta">11:14:38 · Client intent agent → BST</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">BNCA (Benefit Notification Case Alert) issued. Downstream install teams notified of incoming case for Plans &amp; Specs LLC.</div>
+        <div class="fi-meta">11:14:52 · Client intent agent → BNCA</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">Client record assembled in Client Companion using API schema from <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">external-client-record-openapi-intent-only.json</span>. Account, eligibility, billing group, and PBE populated.</div>
+        <button class="fi-expand" id="rec-btn" onclick="toggleData('rec-data','rec-btn','Show client record fields','Hide client record fields')">Show client record fields</button>
+        <div class="fi-data" id="rec-data" style="display:none">
+          <span class="fi-kv-k">Group ID</span><span class="fi-kv-v">PSL-0125757-IN</span>
+          <span class="fi-kv-k">Legal name</span><span class="fi-kv-v">Plans &amp; Specs LLC</span>
+          <span class="fi-kv-k">Effective date</span><span class="fi-kv-v">01 Sep 2026</span>
+          <span class="fi-kv-k">Billing group</span><span class="fi-kv-v">Columbus office · monthly</span>
+          <span class="fi-kv-k">PBE created</span><span class="fi-kv-v">Facets OAP · IN</span>
+          <span class="fi-kv-k">Broker of record</span><span class="fi-kv-v">Mike Daniel / Moss-Compton</span>
+          <span class="fi-kv-k">Commissions payee</span><span class="fi-kv-v">Verified · 6%</span>
+          <span class="fi-kv-k">ERISA status</span><span class="fi-kv-v">ERISA</span>
+        </div>
+        <div class="fi-meta">11:15:10 · Client intent agent → Client Companion</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-b"></div><div>
+        <div class="fi-text">ET Plans created via mocked Proposal Builder API. 2 ET plans generated referencing benefit plan <strong>38279253</strong> (OAPIN).</div>
+        <button class="fi-expand" id="et-btn" onclick="toggleET()">Show ET plans</button>
+        <div class="fi-list" id="et-data" style="display:none">
+          <div class="fi-list-item"><span>Medical — Facets Open Access Plus IN</span><span class="fi-file">ET-2026-PSL-001</span><span class="tag-g">ready</span></div>
+          <div class="fi-list-item"><span>Pharmacy — Facets Enhanced</span><span class="fi-file">ET-2026-PSL-002</span><span class="tag-g">ready</span></div>
+        </div>
+        <div class="fi-meta">11:15:34 · Client intent agent → Proposal Builder (mocked)</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text">Structure build validation complete. Client record, ET plans, and Facets structure reviewed. All fields correct and consistent. Human observer notified — no action required.</div>
+        <div class="fi-meta">11:17:02 · Client intent agent · Human observer notified</div>
+      </div></div>
+      <div class="feed-item"><div class="fi-dot dot-g"></div><div>
+        <div class="fi-text"><strong>Stage 4 complete.</strong> Client record confirmed Facets-ready. No discrepancies found. Handing off to Install agent.</div>
+        <div class="fi-meta">11:17:44 · Orchestration agent</div>
+        <div class="success-banner"><div class="success-icon">✓</div><div class="success-text">Happy path — no HITL required. Client record and ET plans validated. Proceeding automatically to stage 5.</div></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="card"><div class="card-hd">Client intent inputs</div><div class="card-body">
+      <div class="kv"><span class="kv-k">NCQ reference</span><span class="kv-file">C&amp;W Pizza, LLC - Filled_NCQ.docx</span></div>
+      <div class="kv"><span class="kv-k">Client record API</span><span class="kv-file">external-client-record-openapi-intent-only.json</span></div>
+      <div class="kv"><span class="kv-k">BenSum</span><span class="kv-file">OP-10004316_Bensum_doc.pdf</span></div>
+      <div class="kv"><span class="kv-k">BNCA alert</span><span class="kv-v-g">issued</span></div>
+    </div></div>
+    <div class="card"><div class="card-hd">Client intent outputs</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Group ID</span><span class="kv-v-g">PSL-0125757-IN</span></div>
+      <div class="kv"><span class="kv-k">Structure build</span><span class="kv-v-g">Facets-ready</span></div>
+      <div class="kv"><span class="kv-k">ET plans</span><span class="kv-v-g">2 plans ready</span></div>
+      <div class="kv"><span class="kv-k">Broker verified</span><span class="kv-v-g">Mike Daniel · 6%</span></div>
+      <div class="kv"><span class="kv-k">HITL triggered</span><span class="kv-v-g">none</span></div>
+    </div></div>
+    <div class="next-card"><div class="next-hd"><span class="next-hd-txt">Next: Install (stage 5)</span></div><div class="next-body"><div class="next-desc">Client record and ET plans passed to Install agent. Facets system will be pre-filled via direct API. CIT skipped — direct Facets integration used.</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ─── STAGE 5 ─── -->
+<div id="s5" style="display:none">
+<div class="main">
+  <div class="feed">
+    <div class="feed-header"><span class="feed-header-title">Agent activity — stage 5: install</span><span class="feed-header-status">Pending</span></div>
+    <div class="feed-body"><div class="feed-item"><div class="fi-dot" style="background:#ccc"></div><div><div class="fi-text" style="color:var(--cm)">Waiting for stage 4 handoff. Install agent will pre-fill Facets system using client record PSL-0125757-IN and ET plans ET-2026-PSL-001/002.</div><div class="fi-meta">Orchestration agent</div></div></div></div>
+  </div>
+  <div class="sidebar">
+    <div class="card"><div class="card-hd">Install — pending</div><div class="card-body">
+      <div class="kv"><span class="kv-k">Status</span><span class="kv-v" style="color:var(--cm)">Awaiting stage 4</span></div>
+      <div class="kv"><span class="kv-k">Target system</span><span class="kv-v">Facets · direct API</span></div>
+      <div class="kv"><span class="kv-k">CIT</span><span class="kv-v">skipped</span></div>
+      <div class="kv"><span class="kv-k">Client record</span><span class="kv-v">PSL-0125757-IN</span></div>
+      <div class="kv"><span class="kv-k">ET plans</span><span class="kv-v">ET-2026-PSL-001/002</span></div>
+    </div></div>
+  </div>
+</div>
+</div>
+
+</div><!-- end pipeline page -->
+
+<!-- ═══ RULES PAGE ═══ -->
+<div id="page-rules" style="display:none">
+<div class="subheader">
+  <span class="subheader-title">Rules executor</span>
+  <span class="subheader-sep">/</span>
+  <span class="subheader-sub">Test, inspect and manage compliance rules</span>
+  <span class="subheader-pill">PBAB · State mandates · BST</span>
+</div>
+<div class="rules-wrap">
+  <div class="rules-grid">
+    <div class="rule-input-card">
+      <div class="ri-hd">Run a rule check</div>
+      <div class="ri-body">
+        <div class="form-row"><label class="form-label">Situs state</label><select class="form-select" id="rule-state"><option>IN — Indiana</option><option>NY — New York</option><option>CA — California</option><option>TX — Texas</option><option>FL — Florida</option><option>IL — Illinois</option></select></div>
+        <div class="form-row"><label class="form-label">Rule category</label><select class="form-select" id="rule-cat"><option>Mental health parity (MHP)</option><option>Situs mandate</option><option>GLP-1 coverage</option><option>Preventive care</option><option>Non-standard benefit</option><option>Small group limits</option></select></div>
+        <div class="form-row"><label class="form-label">Benefit value / plan detail</label><input class="form-input" id="rule-benefit" value="Facets Open Access Plus (OAPIN), MH/SA coinsurance 90%, IN situs"></div>
+        <div class="form-row"><label class="form-label">Source file reference (optional)</label><input class="form-input" id="rule-file" placeholder="e.g. Benefit_Plan_details.txt · plan ID 38279253"></div>
+        <div class="form-row"><label class="form-label">Additional context</label><textarea class="form-textarea" id="rule-context" placeholder="Paste plan excerpt, PBAB note, or exception history..."></textarea></div>
+        <button class="btn-run" onclick="runRule()">Run compliance check</button>
+      </div>
+    </div>
+    <div class="rule-results">
+      <div class="rr-hd"><span>Check results</span><span id="rr-status" style="font-size:10px;font-weight:400;margin-left:auto;color:rgba(255,255,255,.7)">Awaiting input</span></div>
+      <div class="rr-body" id="rr-body"><div style="font-size:12px;color:var(--cm);padding:12px 0;text-align:center">Run a check to see results here</div></div>
+    </div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="card">
+      <div class="card-hd">Rule repository — Plans &amp; Specs LLC (OP-10004316 · IN situs)</div>
+      <div class="card-body">
+        <div style="font-size:11px;color:var(--cm);margin-bottom:8px">Rules validated against <span style="font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px">Benefit_Plan_details.txt</span> · plan ID 38279253 · Click to load into executor</div>
+        <div>
+          <span class="rule-chip" onclick="loadRule('MHP')"><span class="rule-chip-dot" style="background:var(--cg)"></span>IN-MHP-001 Mental health parity</span>
+          <span class="rule-chip" onclick="loadRule('SITUS')"><span class="rule-chip-dot" style="background:var(--cg)"></span>IN-SIT-002 Situs IN mandate</span>
+          <span class="rule-chip" onclick="loadRule('GLP1')"><span class="rule-chip-dot" style="background:var(--cr)"></span>IN-GLP-003 GLP-1 coverage</span>
+          <span class="rule-chip" onclick="loadRule('PREV')"><span class="rule-chip-dot" style="background:var(--cg)"></span>IN-PRV-004 Preventive care</span>
+          <span class="rule-chip" onclick="loadRule('NONSTD')"><span class="rule-chip-dot" style="background:var(--co)"></span>IN-NSB-005 Non-standard benefit</span>
+          <span class="rule-chip" onclick="loadRule('SMALL')"><span class="rule-chip-dot" style="background:var(--co)"></span>IN-SGL-006 Small group limits</span>
+          <span class="rule-chip"><span class="rule-chip-dot" style="background:var(--cb)"></span>NY-MHP-001 NY parity rule</span>
+          <span class="rule-chip"><span class="rule-chip-dot" style="background:var(--cb)"></span>TX-SIT-001 TX situs mandate</span>
+          <span class="rule-chip"><span class="rule-chip-dot" style="background:var(--cm)"></span>+ 1,992 more in PBAB</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+function showPage(p){
+  document.getElementById('page-pipeline').style.display=p==='pipeline'?'block':'none';
+  document.getElementById('page-rules').style.display=p==='rules'?'block':'none';
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active')});
+  if(p==='pipeline')document.getElementById('tab-pipeline').classList.add('active');
+  if(p==='rules')document.getElementById('tab-rules').classList.add('active');
+}
+function showStage(s){
+  ['s2','s3','s4','s5'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display=id===s?'block':'none'});
+  var map={s2:'st2',s3:'st3',s4:'st4',s5:'st5'};
+  ['st2','st3','st4','st5'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('active')});
+  var t=document.getElementById(map[s]);if(t)t.classList.add('active');
+}
+function toggleData(dataId,btnId,showTxt,hideTxt){
+  var el=document.getElementById(dataId),btn=document.getElementById(btnId),h=el.style.display==='none';
+  el.style.display=h?'grid':'none';btn.textContent=h?hideTxt:showTxt;
+}
+function toggleET(){
+  var el=document.getElementById('et-data'),btn=document.getElementById('et-btn'),h=el.style.display==='none';
+  el.style.display=h?'block':'none';btn.textContent=h?'Hide ET plans':'Show ET plans';
+}
+var ruleResults={
+  MHP:{status:'pass',items:[{cls:'rt-pass',label:'IN MHP-001 — Mental health parity (MH/SA Hospital IP)',detail:'Plan provides 90% coinsurance (IN tier) for MH/SA Hospital IP — meets or exceeds medical/surgical equivalent. Source: Benefit_Plan_details.txt · plan 38279253.'},{cls:'rt-pass',label:'Substance use disorder coverage',detail:'SUD benefits aligned with Facets & AIMS MHSA Combined package. Compliant.'},{cls:'rt-pass',label:'Out-of-network MH parity',detail:'OON mental health cost-sharing within acceptable range for IN situs. Compliant.'}]},
+  GLP1:{status:'fail',items:[{cls:'rt-fail',label:'IN GLP-1 coverage standard',detail:'Indiana does not mandate GLP-1 obesity coverage in 2026 for small group under 50 lives. However Cigna national standard flags this for review on accounts >100 lives.'},{cls:'rt-pass',label:'Diabetes GLP-1 indication',detail:'Facets Enhanced Pharmacy package covers diabetes-indicated GLP-1. Compliant for this indication.'}]},
+  SITUS:{status:'pass',items:[{cls:'rt-pass',label:'IN situs mandate check',detail:'Plan situs confirmed as IN. All Indiana-specific mandates validated for policy period 09/01/2026–08/31/2027.'},{cls:'rt-pass',label:'ERISA compliance',detail:'Account is ERISA-qualified (confirmed in Account_Details_OP-10004316.json). Mandate scope correctly scoped.'}]},
+  NONSTD:{status:'warn',items:[{cls:'rt-warn',label:'Non-standard benefit check — MHSA Combined',detail:'Facets & AIMS MHSA Combined package (ID 893) includes non-standard combined benefit design. PBAB exception pre-approved. Reference: Benefit_Plan_details.txt.'},{cls:'rt-pass',label:'Standard packages',detail:'Medical (Copay/Coinsurance) and Pharmacy (Enhanced) packages are within standard approved parameters.'}]},
+  PREV:{status:'pass',items:[{cls:'rt-pass',label:'ACA preventive care §2713',detail:'Facets Open Access Plus includes USPSTF Grade A/B services at $0 cost-sharing. Compliant.'},{cls:'rt-pass',label:'Immunizations',detail:'ACIP-recommended vaccines covered at 100%. Compliant.'}]},
+  SMALL:{status:'warn',items:[{cls:'rt-warn',label:'Small group limits — 49 lives',detail:'49 eligible employees falls at the boundary of the 2–49 sub-segment (confirmed in Opportunity_OP-10004316.json). Verify correct rating methodology (Traditional-Pooled/Block Rated) has been applied.'},{cls:'rt-pass',label:'Participation rate',detail:'100% participation (49/49) confirmed in Census_File_RFP-2026-531.xlsx. No minimum participation issue.'}]}
+};
+function runRule(){
+  var cat=document.getElementById('rule-cat').value,key='MHP';
+  if(cat.includes('GLP'))key='GLP1';
+  else if(cat.includes('Situs'))key='SITUS';
+  else if(cat.includes('Non-standard'))key='NONSTD';
+  else if(cat.includes('Preventive'))key='PREV';
+  else if(cat.includes('Small'))key='SMALL';
+  var res=ruleResults[key],sc={pass:'var(--cg)',fail:'var(--cr)',warn:'var(--co)'};
+  document.getElementById('rr-status').textContent='Result: '+res.status.toUpperCase();
+  document.getElementById('rr-status').style.color=sc[res.status];
+  document.getElementById('rr-body').innerHTML=res.items.map(function(i){return'<div class="rule-trace-item '+i.cls+'"><div class="rt-label">'+i.label+'</div><div class="rt-detail">'+i.detail+'</div></div>'}).join('');
+}
+function loadRule(key){
+  var map={
+    MHP:['IN — Indiana','Mental health parity (MHP)','Facets Open Access Plus (OAPIN), MH/SA coinsurance 90%, IN situs','Benefit_Plan_details.txt · plan ID 38279253'],
+    GLP1:['IN — Indiana','GLP-1 coverage','Facets Enhanced Pharmacy, small group 49 lives, IN situs','Benefit_Plan_details.txt · plan ID 38279253'],
+    SITUS:['IN — Indiana','Situs mandate','IN situs, ERISA, policy 09/01/2026','Account_Details_OP-10004316.json · ERISA confirmed'],
+    NONSTD:['IN — Indiana','Non-standard benefit','Facets & AIMS MHSA Combined package ID 893','Benefit_Plan_details.txt · package 893'],
+    PREV:['IN — Indiana','Preventive care','USPSTF Grade A/B, $0 cost-share, Facets OAP','Benefit_Plan_details.txt · plan 38279253'],
+    SMALL:['IN — Indiana','Small group limits','49 lives, 100% participation, Traditional-Pooled','Census_File_RFP-2026-531.xlsx · 49 employees']
+  };
+  var d=map[key];if(!d)return;
+  document.getElementById('rule-state').value=d[0];
+  document.getElementById('rule-cat').value=d[1];
+  document.getElementById('rule-benefit').value=d[2];
+  document.getElementById('rule-file').value=d[3];
+  showPage('rules');runRule();
+}
+</script>
