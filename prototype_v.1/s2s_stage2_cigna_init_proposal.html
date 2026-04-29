@@ -1,0 +1,276 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cb:#0080C9;--cbd:#005f96;--cbl:#e6f4fb;
+  --cg:#52BB40;--cgd:#3a8a2d;--cgl:#eaf7e6;
+  --co:#FA9800;--cn:#003865;--ct:#1a2b3c;--cm:#5a6e82;
+  --cborder:#cce0f0;--cbg:#f4f8fc;--cr:#c0392b;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ct);background:var(--cbg)}
+.nav{background:var(--cn);padding:0 16px;display:flex;align-items:stretch;min-height:52px}
+.nav-brand{display:flex;align-items:center;padding:6px 16px 6px 0;border-right:1px solid rgba(255,255,255,.15);margin-right:8px}
+.nav-tab{padding:0 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;border-bottom:3px solid transparent}
+.nav-tab.active{color:#fff;border-bottom-color:#52BB40}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6)}
+.nav-badge{background:#52BB40;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.subheader{background:var(--cb);padding:10px 16px;display:flex;align-items:center;gap:12px}
+.sh-title{font-size:13px;font-weight:600;color:#fff}
+.sh-sep{color:rgba(255,255,255,.4)}
+.sh-sub{font-size:12px;color:rgba(255,255,255,.8)}
+.sh-pill{background:rgba(255,255,255,.15);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:auto}
+.pipeline-wrap{background:#fff;border-bottom:1px solid var(--cborder);padding:12px 16px}
+.case-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.case-tab{background:var(--cbg);border:1px solid var(--cborder);border-radius:16px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--cm)}
+.case-tab.active{background:var(--cbl);border-color:var(--cb);color:var(--cbd);font-weight:600}
+.pipeline{display:flex}
+.p-step{flex:1;padding:8px 10px;border:1px solid var(--cborder);background:var(--cbg);cursor:pointer;text-align:center}
+.p-step:first-child{border-radius:8px 0 0 8px}
+.p-step:last-child{border-radius:0 8px 8px 0}
+.p-step+.p-step{border-left:none}
+.p-step.done{background:var(--cgl);border-color:var(--cg)}
+.p-step.active{background:var(--cbl);border-color:var(--cb);border-width:1.5px}
+.p-step.mock{opacity:.65}
+.p-num{font-size:10px;color:var(--cm);margin-bottom:2px}
+.p-name{font-size:11px;font-weight:600;color:var(--ct)}
+.p-badge{font-size:9px;padding:2px 5px;border-radius:8px;margin-top:3px;display:inline-block}
+.pb-done{background:var(--cgl);color:var(--cgd)}
+.pb-running{background:var(--cbl);color:var(--cbd)}
+.pb-mock{background:#efefef;color:#888}
+.pb-pending{background:#f0f0f0;color:#888}
+.stage-tabs{display:flex;border-bottom:2px solid var(--cborder);background:#fff;padding:0 16px}
+.stage-tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--cm);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.stage-tab.active{color:var(--cb);border-bottom-color:var(--cb);font-weight:600}
+.stage-tab.done-tab{color:var(--cgd)}
+.happy-banner{background:var(--cgl);border-left:4px solid var(--cg);border-radius:0 6px 6px 0;padding:10px 14px;margin:12px 16px 0;display:flex;align-items:flex-start;gap:10px}
+.hb-icon{width:22px;height:22px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px}
+.hb-title{font-size:12px;font-weight:700;color:var(--cgd);margin-bottom:3px}
+.hb-desc{font-size:11px;color:var(--cgd);line-height:1.6}
+.fc{font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px;white-space:nowrap}
+.main{display:grid;grid-template-columns:1fr 300px;gap:12px;padding:12px 16px}
+.feed{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.feed-header{background:var(--cn);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.fh-title{font-size:12px;font-weight:600;color:#fff}
+.fh-status{font-size:11px;color:rgba(255,255,255,.65);margin-left:auto}
+.feed-body{padding:12px 14px}
+.fi{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0f5fa;align-items:flex-start}
+.fi:last-child{border-bottom:none}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dg{background:var(--cg)}.db{background:var(--cb)}.do{background:var(--co)}
+.fi-text{font-size:12px;color:var(--ct);line-height:1.5}
+.fi-meta{font-size:10px;color:var(--cm);margin-top:2px}
+.expbtn{font-size:11px;color:var(--cb);background:none;border:none;cursor:pointer;padding:2px 0;margin-top:3px;display:block}
+.expbtn:hover{text-decoration:underline}
+.fi-grid{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:3px 16px}
+.gk{color:var(--cm)}.gv{font-weight:600;color:var(--ct)}
+.fi-list{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px}
+.fi-li{padding:4px 0;border-bottom:1px solid var(--cborder);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.fi-li:last-child{border-bottom:none}
+.tg{background:var(--cgl);color:var(--cgd);font-size:10px;padding:1px 6px;border-radius:8px;font-weight:600}
+.ok-banner{background:var(--cgl);border:1px solid var(--cg);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-top:8px}
+.ok-icon{width:20px;height:20px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.ok-text{font-size:12px;color:var(--cgd);font-weight:500;line-height:1.4}
+.sidebar{display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.card-hd{background:var(--cb);padding:8px 12px;font-size:12px;font-weight:600;color:#fff}
+.card-body{padding:10px 12px}
+.kv{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f5fa;align-items:center;gap:6px}
+.kv:last-child{border-bottom:none}
+.kk{color:var(--cm);flex-shrink:0}
+.kv-v{font-weight:600;color:var(--ct);text-align:right}
+.kv-g{font-weight:600;color:var(--cgd);text-align:right}
+.next-card{background:var(--cgl);border:1.5px solid var(--cg);border-radius:8px;overflow:hidden}
+.next-hd{background:var(--cg);padding:8px 12px}
+.next-hd-txt{font-size:12px;font-weight:700;color:#fff}
+.next-body{padding:10px 12px;font-size:11px;color:var(--cgd);line-height:1.5}
+</style>
+
+<div>
+<div class="nav">
+  <div class="nav-brand">
+    <img id="logo" height="36" style="display:block" alt="Cigna Healthcare"/>
+  </div>
+  <div class="nav-tab active">Pipeline</div>
+  <div class="nav-tab">Rules executor</div>
+  <div class="nav-tab">Audit log</div>
+  <div class="nav-tab">Settings</div>
+  <div class="nav-right"><span>U500 · Medical</span><span class="nav-badge">LIVE POC</span></div>
+</div>
+
+<div class="subheader">
+  <span class="sh-title">Sale-to-Setup orchestration</span><span class="sh-sep">/</span><span class="sh-sub">Active cases: 4</span><span class="sh-pill">Facets track · Pre-sale scope</span>
+</div>
+
+<div class="pipeline-wrap">
+  <div class="case-tabs">
+    <span class="case-tab active">Plans &amp; Specs LLC</span>
+    <span class="case-tab">C&amp;W Pizza LLC</span>
+    <span class="case-tab">Atlantic Coast Mortgage</span>
+    <span class="case-tab">OSS Tactical LLC</span>
+    <span class="case-tab" style="border-style:dashed">+ new case</span>
+  </div>
+  <div class="pipeline">
+    <div class="p-step done mock"><div class="p-num">01</div><div class="p-name">RFP intake</div><span class="p-badge pb-mock">mocked</span></div>
+    <div class="p-step active"><div class="p-num">02</div><div class="p-name">Initial proposal</div><span class="p-badge pb-running">running</span></div>
+    <div class="p-step mock"><div class="p-num">03</div><div class="p-name">Sales negotiation</div><span class="p-badge pb-mock">mocked</span></div>
+    <div class="p-step"><div class="p-num">04</div><div class="p-name">Client intent</div><span class="p-badge pb-pending">pending</span></div>
+    <div class="p-step"><div class="p-num">05</div><div class="p-name">Install</div><span class="p-badge pb-pending">pending</span></div>
+  </div>
+</div>
+
+<div class="stage-tabs">
+  <div class="stage-tab active">02 · Initial proposal</div>
+  <div class="stage-tab">03 · Sales negotiation</div>
+  <div class="stage-tab">04 · Client intent</div>
+  <div class="stage-tab">05 · Install</div>
+</div>
+
+<div class="happy-banner">
+  <div class="hb-icon">✓</div>
+  <div>
+    <div class="hb-title">Happy path — completed with no exceptions</div>
+    <div class="hb-desc">UW Proposal Agent processed Plans &amp; Specs LLC (OP-10004316) end-to-end without human intervention. RFP data ingested from <span class="fc">RFP-2026-531.json</span>, census loaded from <span class="fc">Census_File_RFP-2026-531.xlsx</span>. All 5 IN situs compliance rules passed. Initial compliant quote generated automatically.</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="feed">
+    <div class="feed-header">
+      <span class="fh-title">Agent activity — stage 2: initial proposal creation</span>
+      <span class="fh-status">Complete · 09:02:18</span>
+    </div>
+    <div class="feed-body">
+
+      <div class="fi"><div class="dot dg"></div><div>
+        <div class="fi-text">RFP packet received — <strong>Plans &amp; Specs LLC</strong>. RFP ID <strong>RFP-2026-531</strong> parsed. Account <strong>OP-10004316</strong> updated in Salesforce.</div>
+        <div class="fi-list" style="margin-top:6px">
+          <div class="fi-li"><span>RFP source</span><span class="fc">RFP-2026-531.json</span></div>
+          <div class="fi-li"><span>Opportunity</span><span class="fc">Opportunity_OP-10004316.json</span></div>
+          <div class="fi-li"><span>Account</span><span class="fc">Account_Details_OP-10004316.json</span></div>
+        </div>
+        <div class="fi-meta">09:01:04 · RFP intake agent (mocked)</div>
+      </div></div>
+
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Census analysis complete. 49 eligible employees. Incumbent: <strong>Aetna</strong>. Funding: Traditional-Pooled/Block Rated.</div>
+        <button class="expbtn" id="c-btn" onclick="tog('c-d','c-btn','Show census stats','Hide census stats')">Show census stats</button>
+        <div class="fi-grid" id="c-d" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">Census_File_RFP-2026-531.xlsx</span>
+          <span class="gk">Sheet</span><span class="gv">Master Census A</span>
+          <span class="gk">Eligible employees</span><span class="gv">49 (100%)</span>
+          <span class="gk">Coverage tiers</span><span class="gv">EE / ES / EC / EF</span>
+          <span class="gk">Situs state</span><span class="gv">IN — Indiana</span>
+          <span class="gk">Incumbent</span><span class="gv">Aetna (primary)</span>
+          <span class="gk">Segment</span><span class="gv">Select · 2–49</span>
+        </div>
+        <div class="fi-meta">09:01:12 · UW proposal agent</div>
+      </div></div>
+
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Product identified via Contour: <strong>Facets Open Access Plus (OAPIN)</strong>, benefit plan ID <strong>38279253</strong>. Proposal <strong>UWP-2026-393-1</strong> created. Packages: Medical (Facets Copay/Coinsurance), Pharmacy (Enhanced), MHSA (Facets &amp; AIMS Combined).</div>
+        <button class="expbtn" id="p-btn" onclick="tog('p-d','p-btn','Show plan details','Hide plan details')">Show plan details</button>
+        <div class="fi-grid" id="p-d" style="display:none">
+          <span class="gk">Source files</span><span class="gv" style="font-family:monospace;font-size:10px">OP-10004316_Proposal_dtls.csv</span>
+          <span class="gk">Benefit attributes</span><span class="gv" style="font-family:monospace;font-size:10px">Benefit_Plan_details.txt</span>
+          <span class="gk">Proposal ID</span><span class="gv">UWP-2026-393-1</span>
+          <span class="gk">Plan</span><span class="gv">Facets Open Access Plus</span>
+          <span class="gk">Plan code</span><span class="gv">OAPIN</span>
+          <span class="gk">Benefit plan ID</span><span class="gv">38279253</span>
+          <span class="gk">Funding type</span><span class="gv">Traditional-Pooled</span>
+          <span class="gk">Claims system</span><span class="gv">Facets</span>
+          <span class="gk">MH/SA coinsurance</span><span class="gv">90% (IN tier)</span>
+          <span class="gk">Commission</span><span class="gv">6% — Moss-Compton</span>
+        </div>
+        <div class="fi-meta">09:01:22 · UW proposal agent → Contour</div>
+      </div></div>
+
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Rates calculated. Monthly premium total: <strong>$94,562.16</strong> across 49 subscribers (Tier 4). EE: $1,284.81 · ES: $2,698.11 · EC: $2,441.14 · EF: $3,854.44.</div>
+        <button class="expbtn" id="r-btn" onclick="tog('r-d','r-btn','Show rate breakdown','Hide rate breakdown')">Show rate breakdown</button>
+        <div class="fi-grid" id="r-d" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">OP-10004316_Proposal_Rates.csv</span>
+          <span class="gk">Rate view</span><span class="gv" style="font-family:monospace;font-size:10px">Op-10004316_Proposal_rt_vw.csv</span>
+          <span class="gk">Total monthly premium</span><span class="gv">$94,562.16</span>
+          <span class="gk">Total subscribers</span><span class="gv">49</span>
+          <span class="gk">EE rate (PEPM)</span><span class="gv">$1,284.81</span>
+          <span class="gk">ES rate (PEPM)</span><span class="gv">$2,698.11</span>
+          <span class="gk">EC rate (PEPM)</span><span class="gv">$2,441.14</span>
+          <span class="gk">EF rate (PEPM)</span><span class="gv">$3,854.44</span>
+        </div>
+        <div class="fi-meta">09:01:30 · UW proposal agent → Contour</div>
+      </div></div>
+
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Benefit plan attributes loaded from <span class="fc">Benefit_Plan_details.txt</span> (plan ID 38279253). ERISA status confirmed from <span class="fc">Account_Details_OP-10004316.json</span>.</div>
+        <div class="fi-meta">09:01:35 · UW proposal agent</div>
+      </div></div>
+
+      <div class="fi"><div class="dot do"></div><div>
+        <div class="fi-text">Shift Left rules check initiated. Situs: <strong>IN (Indiana)</strong>. Validating proposal against PBAB — 2,000 compliance rules. Checking MH parity, situs mandate, preventive care, small group limits, GLP-1.</div>
+        <div class="fi-meta">09:01:44 · Rules agent → PBAB</div>
+      </div></div>
+
+      <div class="fi"><div class="dot dg"></div><div>
+        <div class="fi-text">All 5 compliance rules passed. Quote <strong>UWP-2026-393-1</strong> confirmed. MCP server notified — downstream systems updated.</div>
+        <div class="fi-meta">09:02:03 · Rules agent · Orchestration agent</div>
+      </div></div>
+
+      <div class="fi"><div class="dot dg"></div><div>
+        <div class="fi-text"><strong>Stage 2 complete.</strong> No exceptions or compliance flags raised. Proceeding to sales negotiation (stage 3, mocked).</div>
+        <div class="fi-meta">09:02:18 · Orchestration agent</div>
+        <div class="ok-banner">
+          <div class="ok-icon">✓</div>
+          <div class="ok-text">Happy path — no HITL required. Pipeline continuing automatically to stage 3.</div>
+        </div>
+      </div></div>
+
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="card"><div class="card-hd">Case summary — Plans &amp; Specs LLC</div><div class="card-body">
+      <div class="kv"><span class="kk">Account</span><span class="kv-v">Plans &amp; Specs LLC</span></div>
+      <div class="kv"><span class="kk">Opportunity</span><span class="kv-v">OP-10004316</span></div>
+      <div class="kv"><span class="kk">Eligible employees</span><span class="kv-v">49</span></div>
+      <div class="kv"><span class="kk">Situs state</span><span class="kv-v">IN — Indiana</span></div>
+      <div class="kv"><span class="kk">Incumbent</span><span class="kv-v">Aetna (primary)</span></div>
+      <div class="kv"><span class="kk">Broker</span><span class="kv-v">Mike Daniel · Moss-Compton</span></div>
+      <div class="kv"><span class="kk">Commission</span><span class="kv-v">6%</span></div>
+      <div class="kv"><span class="kk">Effective date</span><span class="kv-v">01 Sep 2026</span></div>
+      <div class="kv"><span class="kk">Track</span><span class="kv-v">Facets · Select</span></div>
+    </div></div>
+
+    <div class="card"><div class="card-hd">Input files — stage 2</div><div class="card-body">
+      <div class="kv"><span class="kk">RFP</span><span class="fc">RFP-2026-531.json</span></div>
+      <div class="kv"><span class="kk">Census</span><span class="fc">Census_File_RFP-2026-531.xlsx</span></div>
+      <div class="kv"><span class="kk">Opportunity</span><span class="fc">Opportunity_OP-10004316.json</span></div>
+      <div class="kv"><span class="kk">Account</span><span class="fc">Account_Details_OP-10004316.json</span></div>
+      <div class="kv"><span class="kk">Benefit plan</span><span class="fc">Benefit_Plan_details.txt</span></div>
+    </div></div>
+
+    <div class="card"><div class="card-hd">Output files — stage 2</div><div class="card-body">
+      <div class="kv"><span class="kk">Proposal</span><span class="fc">OP-10004316_Proposal_dtls.csv</span></div>
+      <div class="kv"><span class="kk">Rates</span><span class="fc">OP-10004316_Proposal_Rates.csv</span></div>
+      <div class="kv"><span class="kk">Rate view</span><span class="fc">Op-10004316_Proposal_rt_vw.csv</span></div>
+      <div class="kv"><span class="kk">Product view</span><span class="fc">OP-10004316_Proposal_Info1.csv</span></div>
+    </div></div>
+
+    <div class="card"><div class="card-hd">Compliance — IN situs (5/5)</div><div class="card-body">
+      <div class="kv"><span class="kk">Mental health parity</span><span class="kv-g">pass</span></div>
+      <div class="kv"><span class="kk">Situs mandate IN</span><span class="kv-g">pass</span></div>
+      <div class="kv"><span class="kk">Preventive care</span><span class="kv-g">pass</span></div>
+      <div class="kv"><span class="kk">Small group limits</span><span class="kv-g">pass</span></div>
+      <div class="kv"><span class="kk">GLP-1 standard</span><span class="kv-g">pass</span></div>
+    </div></div>
+
+    <div class="next-card">
+      <div class="next-hd"><span class="next-hd-txt">Next: Sales negotiation (stage 3)</span></div>
+      <div class="next-body">All checks passed. Handing off to Palantir Negotiation Assistant. Iterative loop with broker Moss-Compton will be mocked.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+document.getElementById('logo').src='data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE1MTAgODA1IiB3aWR0aD0iMTUxMCIgaGVpZ2h0PSI4MDUiPiA8dGl0bGU+Y2lnbmEtbG9nby1zdmc8L3RpdGxlPiA8c3R5bGU+IC5zMCB7IGZpbGw6IG5vbmUgfSAuczEgeyBmaWxsOiB3aGl0ZSB9IC5zMiB7IGZpbGw6IHdoaXRlIH0gPC9zdHlsZT4gPGcgaWQ9IkxheWVyIj4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJub25lIiBkPSJtMTQzMC4zIDc0Ni40Yy05LjUgMC0xNi4yIDcuMy0xNy42IDE3LjhoMzQuOGMtMS4xLTEwLTctMTcuOC0xNy4yLTE3Ljh6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbD0ibm9uZSIgZD0ibTk2Ny45IDc4Mi40djAuMmMwIDYuNCA1LjcgMTAgMTMuMSAxMCAxMC4yIDAgMTcuOS01LjggMTcuOS0xNC4ydi0zLjljLTMuOS0xLjYtOS41LTIuNy0xNS41LTIuNy05LjggMC0xNS41IDQtMTUuNSAxMC42eiIvPiA8cGF0aCBpZD0iTGF5ZXIiIGZpbGw9Im5vbmUiIGQ9Im0xMjk0LjkgNDA1LjFjLTUyLjQgMC03NC4yIDUxLjgtNzQuMiAxMTQuOCAwIDYyLjkgMjEuOCAxMTQuNyA3NC4yIDExNC43IDUyLjMgMCA3NC4xLTUxLjcgNzQuMS0xMTQuNyAwLjEtNjMtMjEuNy0xMTQuOC03NC4xLTExNC44eiIvPiA8cGF0aCBpZD0iTGF5ZXIiIGZpbGw9Im5vbmUiIGQ9Im02MDYuNCA3NjYuM2M0OC42IDAgNzUuNi0yOC43IDc1LjYtNTYuOCAwLTIyLjMtMTMuNS00NC4xLTUyLjgtNDQuMWgtNjUuN2MtMTcgOC43LTI4LjcgMjkuNC0yOC43IDQ5LjkgMCAzMC41IDI1LjggNTEgNzEuNiA1MXoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJub25lIiBkPSJtOTA4LjggNzQ2LjRjLTkuNSAwLTE2LjIgNy4zLTE3LjYgMTcuOGgzNC44Yy0xLTEwLTctMTcuOC0xNy4yLTE3Ljh6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbD0ibm9uZSIgZD0ibTYwMy40IDQwMi4zYy0zMi44IDAtNTMuOSAyNy42LTUzLjkgNzMuMyAwIDQ1LjcgMjEuMSA3My4zIDUzLjkgNzMuMyAzMi4zIDAgNTMuNC0yNy42IDUzLjQtNzMuMyAwLTQ1LjgtMjEuMS03My4zLTUzLjQtNzMuM3oiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJub25lIiBkPSJtMTI4NS42IDc4Mi40djAuMmMwIDYuNCA1LjggMTAgMTMuMSAxMCAxMC4zIDAgMTgtNS44IDE4LTE0LjJ2LTMuOWMtNC0xLjYtOS41LTIuNy0xNS41LTIuNy05LjggMC0xNS42IDQtMTUuNiAxMC42eiIvPiA8cGF0aCBpZD0iTGF5ZXIiIGZpbGw9IndoaXRlIiBkPSJtODM2LjYgNzMzLjdjLTEwLjYgMC0xNi44IDUuNS0yMS4yIDExLjl2LTM2LjRoLTE1LjV2OTMuN2gxNS41di0zOC4zYzAtMTAuNSA2LjMtMTYuOCAxNS4zLTE2LjggOS4yIDAgMTQuNSA2LjEgMTQuNSAxNi42djM4LjVoMTUuNXYtNDMuMmMwLTE1LjgtOC44LTI2LTI0LjEtMjZ6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSJ3aGl0ZSIgZD0ibTk0MS40IDc3MC4yYzAgMS40LTAuMSAyLjgtMC4zIDQuM2gtNDkuOGMxLjcgMTEuMSA5LjUgMTcuMiAxOS41IDE3LjIgNy42IDAgMTMtMi44IDE4LjQtOGw5LjEgOGMtNi40IDcuNy0xNS4zIDEyLjctMjcuNyAxMi43LTE5LjcgMC0zNC44LTE0LjItMzQuOC0zNS4xdi0wLjNjMC0xOS40IDEzLjctMzUuMyAzMy4xLTM1LjMgMjEuNiAwIDMyLjUgMTYuOSAzMi41IDM2LjV6bS0xNS40LTZjLTEuMS0xMC03LTE3LjgtMTcuMi0xNy44LTkuNSAwLTE2LjIgNy4zLTE3LjYgMTcuOHoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJ3aGl0ZSIgZD0ibTkzNi42IDY0Ny4zYzAtMTMtNC43LTEzLjctNC43LTEzLjdoLTcuMWMtMTEuOCAwLTIzLjUtMTEuOC0yMy41LTIzLjZ2LTExOS41YzAtNDguMyAyOC44LTc3LjEgNjUuOS03Ny4xIDMxLjggMCA1NS4zIDE3LjYgNTUuMyA1Ni41djE0MC4xYzAgMTEuOC0xMS43IDIzLjYtMjMuNSAyMy42aC03LjFjMCAwLTQuNyAxLjItNC43IDEzLjIgMCAxMiA0LjcgMTguNSA0LjcgMTguNWgxMzguOWMwIDAgNC43LTUuMiA0LjctMTcuMiAwLTEyLTQuNy0xNC41LTQuNy0xNC41aC03Yy0xMS44IDAtMjMuNi0xMS44LTIzLjYtMjMuNXYtMTQzLjFjMC02Ny43LTQyLjQtMTAwLjYtMTAzLjYtMTAwLjYtNDUuMyAwLTgwLjEgMjEuMS0xMDEuMyA1Mi4zIDAgMC0wLjEtMzAuOC0wLjEtMzQuNiAwLTEwLTkuNy0xMy42LTIxLjMtOC45LTcuOCAzLjItNDcuNCAxNy4xLTgwLjkgMTcuMS0xLjkgMi41LTQuOCA3LjUtNC44IDE1LjcgMCA3LjIgMS43IDEwLjkgNC43IDE1LjloNy4xYzExLjggMCAyMy41IDExLjggMjMuNSAyMy41djE2Mi42YzAgMTEuOC0xMS43IDIzLjYtMjMuNSAyMy42aC03LjFjMCAwLTQuNyAwLjctNC43IDEzLjQgMCAxMi44IDQuNyAxOC4yIDQuNyAxOC4yaDEzOC45YzAuMSAwLjEgNC44LTQuOSA0LjgtMTcuOXoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IndoaXRlIiBkPSJtNjc5LjggMzg3LjhoNzguMmMyIDIuOSA0LjYgMTAuNiA0LjYgMTcuNyAwIDktMi40IDE0LjUtNC43IDE4LjRoLTQyLjhjOS4yIDE1LjMgMTQuNSAzMi45IDE0LjUgNTEuNiAwIDYwLjQtNTQgMTA5LjctMTI2LjEgMTA5LjctMTcuNiAwLTI3LjYtMS44LTM5LjktNS45bC0yMS43IDI5LjRoMTEwLjhjNzMuNCAwIDEwMi43IDMzLjMgMTAyLjcgODIuNiAwIDY5LjEtNzcuNCAxMTMuMS0xNjAuNyAxMTMuMS04Mi43IDAtMTE5LjctMzQuNi0xMTkuNy03Ni44IDAtMjEuNyAxMS44LTQ3IDM3LjYtNjIuM2gtMzUuMWMwIDAtNy4yLTcuNi03LjItMTguOSAwLTExLjMgNi4zLTIyLjcgNi4zLTIyLjdsNDkuNC02MS40Yy0yOC4xLTE4LjctNDguNi00OS4yLTQ4LjYtODYuNyAwLTYxIDUzLjMtMTA5LjYgMTI2LTEwOS42IDI5IDAgNTUuMyA4LjEgNzYuNCAyMS44em0tMTQ1IDMyNy42YzAgMzAuNSAyNS45IDUxIDcxLjYgNTEgNDguNyAwIDc1LjYtMjguNyA3NS42LTU2LjkgMC0yMi4yLTEzLjUtNDQuMS01Mi43LTQ0LjFoLTY1LjdjLTE3IDguOC0yOC44IDI5LjUtMjguOCA1MHptMTIyLTIzOS44YzAtNDUuNy0yMS4xLTczLjItNTMuNC03My4yLTMyLjggMC01My45IDI3LjUtNTMuOSA3My4yIDAgNDUuOCAyMS4xIDczLjMgNTMuOSA3My4zIDMyLjMgMCA1My40LTI3LjUgNTMuNC03My4zeiIvPiA8cGF0aCBpZD0iTGF5ZXIiIGZpbGw9IndoaXRlIiBkPSJtMjYwLjEgNTY2LjhjLTkuNC0zLjMtMTcuMi0wLjQtMTcuMi0wLjQtMjEuOCAzNy45LTQxLjUgNTUuMy03Mi4yIDU1LjMtNTUuMyAwLTkwLjYtNTAtOTAuNi0xMDkuNCAwLTU1LjQgMjQuNy0xMDkuNSA4MS44LTEwOS41IDM1LjkgMCA2My41IDIyLjQgNjMuNSA1Ni41bDAuOCAxMC42YzAgMC0xLjEgNC43IDEzLjkgNC43IDE0LjkgMCAxOS00LjcgMTktNC43bC0zLTc3LjFjMCAwLTAuMy0yLTEuNC0zLjQtMS0xLjQtMi43LTIuNS0yLjctMi41LTIzLTEyLjktNTMuNi0yMC42LTg5LjUtMjAuNi04NC4yIDAtMTYyLjUgNTYuNS0xNjIuNSAxNTguMyAwIDkxLjIgNjguOSAxNDguOSAxNDcuOCAxNDguOSA3NC4yIDAgMTA4LjYtNDYuNSAxMjMuOS05OC4zIDAgMC00LjItNS44LTExLjYtOC40eiIvPiA8cGF0aCBpZD0iTGF5ZXIiIGZpbGw9IndoaXRlIiBkPSJtMzY1LjYgMzQ1LjRjLTI2LjkgMC00OC43LTIyLjMtNDguNy00OS45IDAtMjcuNyAyMS44LTUwIDQ4LjctNTAgMjYuOSAwIDQ4LjcgMjIuMyA0OC43IDUwIDAgMjcuNi0yMS44IDQ5LjktNDguNyA0OS45eiIvPiA8cGF0aCBpZD0iTGF5ZXIiIGZpbGw9IndoaXRlIiBkPSJtNDA0LjUgNDM2LjhjMC0xMS44IDExLjgtMjMuNiAyMy41LTIzLjZoNy4xYzAgMCA0LjctMyA0LjctMTQuNCAwLTExLjQtNC43LTE3LjMtNC43LTE3LjNoLTEzOC45YzAgMC00LjcgNy4yLTQuNyAxOC4zIDAgMTEuMSA0LjcgMTMuNCA0LjcgMTMuNGg3YzExLjggMCAyMy42IDExLjggMjMuNiAyMy42djExNy42IDU1LjZjMCAxMS44LTExLjggMjMuNi0yMy42IDIzLjZoLTdjMCAwLTQuNyAyLjMtNC43IDEzLjQgMCAxMS4xIDQuNyAxOC4yIDQuNyAxOC4yaDEzOC45YzAgMCA0LjctNS44IDQuNy0xNy4zIDAtMTEuNC00LjctMTQuMy00LjctMTQuM2gtNy4xYy0xMS43IDAtMjMuNS0xMS44LTIzLjUtMjMuNnYtNDAuNXoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IndoaXRlIiBkPSJtMTMzMS43IDc2Mi43djQwLjJoLTE1LjR2LTguM2MtNC42IDUuNS0xMS43IDkuNy0yMS45IDkuNy0xMi45IDAtMjQuMi03LjMtMjQuMi0yMC45di0wLjNjMC0xNSAxMS43LTIyLjIgMjcuNS0yMi4yIDguMiAwIDEzLjUgMS4yIDE4LjggMi44di0xLjNjMC05LjMtNS45LTE0LjUtMTYuNy0xNC41LTcuNiAwLTEzLjMgMS43LTE5LjQgNC4zbC00LjMtMTIuNWM3LjUtMy4zIDE0LjgtNS43IDI1LjktNS43IDIwIDAgMjkuNyAxMC42IDI5LjcgMjguN3ptLTE1IDExLjhjLTQtMS41LTkuNS0yLjctMTUuNS0yLjctOS44IDAtMTUuNiA0LTE1LjYgMTAuNnYwLjJjMCA2LjQgNS44IDEwIDEzLjEgMTAgMTAuMyAwIDE4LTUuOCAxOC0xNC4yIDAgMCAwLTMuOSAwLTMuOXoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJ3aGl0ZSIgZD0ibTEzNjUuOCA3NTAuNHYtMTUuM2gtMTUuNXY2Ny44aDE1LjV2LTI1LjhjMC0xOCA5LjUtMjYuOCAyMy4xLTI2LjhoMC45di0xNi41Yy0xMi0wLjUtMTkuOCA2LjQtMjQgMTYuNnoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IndoaXRlIiBkPSJtMTQ3Ny40IDYzNi40bC04MS4yIDM0LjdjMCAwLTYuMiAyLjYtMTQuMyAwLjgtOS0yLTkuMy0xMC05LjMtMTB2LTM1Yy0yMS44IDI4LjMtNDkuNSA0Ni41LTkzIDQ2LjUtNzYuNiAwLTEzOS01NS45LTEzOS0xNTAuNiAwLTEwMS4yIDcyLjQtMTU2LjUgMTQ4LjQtMTU2LjUgNTAuNiAwIDc4LjcgMjQuMSA5NS40IDQzLjggMCAwIDMuNCAzLjggNi4zIDBsMjUtMzIuNmMwIDAgMi43LTMgNi4yLTNoMTcuOWM2LjUgMCA3IDYuMSA3IDYuMXYyMDYuOWMwIDExLjggMTEuNyAyMy42IDIzLjUgMjMuNmg3LjFjMCAwIDQuNyAyLjcgNC43IDExLjkgMCA5LjEtNC43IDEzLjQtNC43IDEzLjR6bTAgMHEwIDAgMCAwem0tMTA4LjQtMTE2LjVjMC02My0yMS44LTExNC44LTc0LjEtMTE0LjgtNTIuNCAwLTc0LjIgNTEuOC03NC4yIDExNC44IDAgNjMgMjEuOCAxMTQuNyA3NC4yIDExNC43IDUyLjQgMCA3NC4yLTUxLjcgNzQuMS0xMTQuN3oiLz4gPGcgaWQ9IkxheWVyIj4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJ3aGl0ZSIgZD0ibTE0ODAuMyA3NDYuOGwtMy42LTAuOXEtMi4yLTAuNS0yLjgtMC45LTEtMC41LTEtMS43IDAtMS4yIDEtMS45YzAuNy0wLjQgMS42LTAuNyAyLjctMC43cTEuNiAwIDIuNiAwLjUgMS42IDAuOCAxLjcgMi43aDQuMnEtMC4xLTMuMy0yLjQtNS4xLTIuNC0xLjgtNS44LTEuOC00IDAtNi4xIDEuOS0yIDEuOS0yIDQuNyAwIDMuMSAyLjEgNC42IDEuMyAwLjkgNC42IDEuN2wyLjMgMC41cTEuOSAwLjQgMi45IDAuOSAwLjkgMC42IDAuOSAxLjcgMCAxLjgtMS44IDIuNC0xIDAuNC0yLjYgMC40LTIuNiAwLTMuNy0xLjMtMC42LTAuOC0wLjgtMi4yaC00LjJxMCAzLjMgMi40IDUuMiAyLjMgMS45IDYuNSAxLjkgNCAwIDYuMy0xLjljMS41LTEuMyAyLjItMi45IDIuMi00LjhxMC0yLjktMS45LTQuNGMtMC45LTAuNi0yLjEtMS4yLTMuNy0xLjV6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbD0id2hpdGUiIGQ9Im0xNTAzLjIgNzM3LjZsLTMuOCAxNi43LTMuOS0xNi43aC02LjR2MjEuMmg0LjF2LTE0LjNxMC0wLjYgMC0xLjcgMC0xLjIgMC0xLjhsNCAxNy44aDQuM2w0LTE3LjhxMCAwLjYgMCAxLjggMCAxLjEgMCAxLjd2MTQuM2g0LjF2LTIxLjJ6Ii8+IDwvZz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IndoaXRlIiBkPSJtMTAxMy45IDc2Mi43djQwLjJoLTE1LjR2LTguM2MtNC42IDUuNS0xMS43IDkuNy0yMS45IDkuNy0xMi45IDAtMjQuMi03LjMtMjQuMi0yMC45di0wLjNjMC0xNSAxMS43LTIyLjIgMjcuNS0yMi4yIDguMiAwIDEzLjUgMS4yIDE4LjggMi44di0xLjNjMC05LjMtNS45LTE0LjUtMTYuNy0xNC41LTcuNiAwLTEzLjIgMS43LTE5LjQgNC4zbC00LjItMTIuNWM3LjQtMy4zIDE0LjctNS43IDI1LjgtNS43IDIwIDAgMjkuOCAxMC42IDI5LjcgMjguN3ptLTE1IDExLjhjLTQtMS41LTkuNS0yLjctMTUuNS0yLjctOS44IDAtMTUuNSA0LTE1LjUgMTAuNnYwLjJjMCA2LjQgNS43IDEwIDEzLjEgMTAgMTAuMiAwIDE3LjktNS44IDE3LjktMTQuMiAwIDAgMC0zLjkgMC0zLjl6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSJ3aGl0ZSIgZD0ibTE0NjIuOSA3NzAuMmMwIDEuNC0wLjIgMi44LTAuMyA0LjNoLTQ5LjhjMS42IDExLjEgOS41IDE3LjIgMTkuNSAxNy4yIDcuNiAwIDEzLTIuOCAxOC40LThsOS4xIDhjLTYuNCA3LjctMTUuMyAxMi43LTI3LjggMTIuNy0xOS42IDAtMzQuOC0xNC4yLTM0LjgtMzUuMXYtMC4zYzAtMTkuNCAxMy44LTM1LjMgMzMuMi0zNS4zIDIxLjYgMCAzMi41IDE2LjkgMzIuNSAzNi41em0tMTUuNC02Yy0xLjEtMTAtNy0xNy44LTE3LjMtMTcuOC05LjUgMC0xNi4xIDcuMy0xNy41IDE3Ljh6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbD0id2hpdGUiIGQ9Im0xMjMzLjYgNzkwLjljLTExLjkgMC0yMC4zLTkuNy0yMC4zLTIxLjh2LTAuMmMwLTExLjggOC4zLTIxLjYgMTkuNi0yMS42IDcuOCAwIDEyLjggMy41IDE3LjUgOC41bDkuNy0xMC40Yy02LjMtNy0xNC4zLTExLjctMjcuMS0xMS43LTIwLjMgMC0zNS4yIDE2LjItMzUuMiAzNS40djAuM2MwIDE5LjIgMTQuOSAzNSAzNSAzNSAxMy4yIDAgMjEuMS01LjMgMjcuOC0xMi43bC05LjQtOS4yYy00LjkgNS0xMC4zIDguNC0xNy42IDguNHoiLz4gPHBhdGggaWQ9IkxheWVyIiBmaWxsPSJ3aGl0ZSIgZD0ibTEwMzMuNCA3MDkuMmgxNS41djkzLjdoLTE1LjV6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbD0id2hpdGUiIGQ9Im0xMDg3LjkgNzE2LjVoLTE1LjV2MTguNmgtOC42djEzLjNoOC42djM1LjdjMCAxNC45IDguMSAxOS45IDE5LjUgMTkuOSA1LjggMCAxMC4yLTEuMyAxNC0zLjR2LTEyLjhjLTMuMSAxLjYtNi4xIDIuNC05LjYgMi40LTUuMyAwLTguMy0yLjUtOC4zLTguNXYtMzMuM2gxOC4ydi0xMy4zaC0xOC4yYzAgMCAwLTE4LjYtMC4xLTE4LjZ6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbD0id2hpdGUiIGQ9Im0xMTU4LjYgNzMzLjdjLTEwLjUgMC0xNi44IDUuNS0yMS4yIDExLjl2LTM2LjRoLTE1LjV2OTMuN2gxNS41di0zOC4zYzAtMTAuNSA2LjMtMTYuOCAxNS4zLTE2LjggOS4yIDAgMTQuNSA2LjEgMTQuNSAxNi42djM4LjVoMTUuNXYtNDMuMmMwLTE1LjgtOC44LTI2LTI0LjEtMjZ6Ii8+IDxwYXRoIGlkPSJMYXllciIgZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSJ3aGl0ZSIgZD0ibTMyOS42IDEyNS4xYzAtMzEuNCAxNC4yLTU5LjQgMzYuNC03OC4xIDIyLjIgMTguOCAzNi4zIDQ2LjkgMzYuMiA3OC4zLTAuMSAzMS4zLTE0LjIgNTkuMy0zNi41IDc4LjEtMjIuMS0xOC45LTM2LjItNDYuOS0zNi4xLTc4LjN6bTE1OC42LTEyNC40YzEwLjEgMTkuNyAxMS44IDQzLjUgMi43IDY1LjQtOS4yIDIyLTI3LjMgMzcuNS00OC4zIDQ0LjMtMTAuMS0xOS43LTExLjgtNDMuNS0yLjYtNjUuNCA5LjEtMjIgMjcuMi0zNy42IDQ4LjItNDQuM3ptLTI0NC40LTAuNWMyMSA2LjggMzkgMjIuNCA0OC4xIDQ0LjQgOSAyMiA3LjIgNDUuOC0yLjkgNjUuNC0yMS02LjgtMzktMjIuNC00OC4xLTQ0LjQtOS4xLTIyLTcuMy00NS44IDIuOS02NS40em0tMTczLjMgMTcyLjRjMTkuNi0xMCA0My40LTExLjcgNjUuNC0yLjYgMjIgOS4yIDM3LjUgMjcuMiA0NC4yIDQ4LjMtMTkuNiAxMC00My40IDExLjctNjUuNCAyLjYtMjItOS4yLTM3LjUtMjcuMy00NC4yLTQ4LjN6bTU5MC4zIDEuM2MtNi44IDIxLTIyLjQgMzktNDQuNCA0OC4xLTIyLjEgOS4xLTQ1LjggNy4zLTY1LjUtMi45IDYuOC0yMSAyMi40LTM5IDQ0LjUtNDggMjItOS4xIDQ1LjctNy4zIDY1LjQgMi44em0tNDYuOCAxMjIuMmMtMTguOSAyMi4yLTQ3IDM2LjMtNzguNCAzNi4yLTMxLjQgMC01OS40LTE0LjItNzguMi0zNi40IDE4LjktMjIuMiA0Ny0zNi4zIDc4LjQtMzYuMiAzMS40IDAuMSA1OS40IDE0LjIgNzguMiAzNi40em0tNzIuMy0xNzUuOWMyLjMgMjktNy42IDU4LjgtMjkuOSA4MS0yMi4yIDIyLjEtNTIuMSAzMS45LTgxLjEgMjkuNS0yLjMtMjkgNy42LTU4LjggMjkuOS04MSAyMi4yLTIyLjEgNTItMzEuOSA4MS4xLTI5LjV6bS0yNjcuNiAxNzUuN2MtMTguOCAyMi4yLTQ2LjkgMzYuNC03OC4zIDM2LjQtMzEuMyAwLjEtNTkuNC0xNC03OC4zLTM2LjIgMTguOC0yMi4yIDQ2LjgtMzYuMyA3OC4yLTM2LjQgMzEuNC0wLjEgNTkuNSAxNCA3OC40IDM2LjJ6bTI2LjYtNjUuMmMtMjkgMi40LTU4LjgtNy40LTgxLjEtMjkuNS0yMi4yLTIyLjItMzIuMS01Mi0yOS44LTgxIDI5LTIuNCA1OC45IDcuNCA4MS4xIDI5LjUgMjIuMyAyMi4yIDMyLjIgNTEuOSAyOS44IDgxeiIvPiA8L2c+IDwvc3ZnPg==';
+function tog(di,bi,st,ht){var el=document.getElementById(di),btn=document.getElementById(bi),h=el.style.display==='none';el.style.display=h?'grid':'none';btn.textContent=h?ht:st;}
+</script>
