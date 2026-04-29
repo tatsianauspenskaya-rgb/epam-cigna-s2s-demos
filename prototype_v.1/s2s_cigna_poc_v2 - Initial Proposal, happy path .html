@@ -1,0 +1,483 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cb:#0080C9;--cbd:#005f96;--cbl:#e6f4fb;--cbm:#b3daf1;
+  --cg:#52BB40;--cgd:#3a8a2d;--cgl:#eaf7e6;
+  --co:#FA9800;--col:#fff3e0;
+  --cn:#003865;--ct:#1a2b3c;--cm:#5a6e82;
+  --cborder:#cce0f0;--cbg:#f4f8fc;--cw:#ffffff;
+  --cr:#c0392b;--crl:#fdf0ee;--cwo:#e67e00;--cwl:#fff8ed;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ct);background:var(--cbg)}
+
+.nav{background:var(--cn);padding:0 16px;display:flex;align-items:stretch}
+.nav-brand{display:flex;align-items:center;gap:10px;padding:12px 16px 12px 0;border-right:1px solid rgba(255,255,255,.15);margin-right:8px}
+.nav-logo{width:32px;height:32px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:26px;height:26px}
+.nav-wordmark{font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px}
+.nav-wordmark span{color:var(--cg);font-weight:400;font-size:11px;display:block;letter-spacing:.3px;margin-top:-2px}
+.nav-tab{padding:0 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;border-bottom:3px solid transparent;transition:all .15s}
+.nav-tab:hover{color:#fff}
+.nav-tab.active{color:#fff;border-bottom-color:var(--cg)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6)}
+.nav-badge{background:var(--cg);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+
+.subheader{background:var(--cb);padding:10px 16px;display:flex;align-items:center;gap:12px}
+.subheader-title{font-size:13px;font-weight:600;color:#fff}
+.subheader-sep{color:rgba(255,255,255,.4)}
+.subheader-sub{font-size:12px;color:rgba(255,255,255,.8)}
+.subheader-pill{background:rgba(255,255,255,.15);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:auto}
+
+.pipeline-wrap{background:#fff;border-bottom:1px solid var(--cborder);padding:12px 16px}
+.case-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.case-tab{background:var(--cbg);border:1px solid var(--cborder);border-radius:16px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--cm)}
+.case-tab.active{background:var(--cbl);border-color:var(--cb);color:var(--cbd);font-weight:600}
+.pipeline{display:flex;align-items:center}
+.p-step{flex:1;padding:8px 10px;border:1px solid var(--cborder);background:var(--cbg);cursor:pointer;text-align:center;transition:all .2s}
+.p-step:first-child{border-radius:8px 0 0 8px}
+.p-step:last-child{border-radius:0 8px 8px 0}
+.p-step+.p-step{border-left:none}
+.p-step.done{background:var(--cgl);border-color:var(--cg)}
+.p-step.active{background:var(--cbl);border-color:var(--cb);border-width:1.5px}
+.p-step.mock{background:#f9f9f9;opacity:.65}
+.p-num{font-size:10px;color:var(--cm);margin-bottom:2px}
+.p-name{font-size:11px;font-weight:600;color:var(--ct)}
+.p-badge{font-size:9px;padding:2px 5px;border-radius:8px;margin-top:3px;display:inline-block}
+.pb-done{background:var(--cgl);color:var(--cgd)}
+.pb-running{background:var(--cbl);color:var(--cbd)}
+.pb-mock{background:#efefef;color:#888}
+.pb-pending{background:#f0f0f0;color:#888}
+
+.main{display:grid;grid-template-columns:1fr 300px;gap:12px;padding:12px 16px}
+
+.feed{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.feed-header{background:var(--cn);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.feed-header-title{font-size:12px;font-weight:600;color:#fff}
+.feed-header-status{font-size:11px;color:rgba(255,255,255,.65);margin-left:auto}
+.spinner{width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.feed-body{padding:12px 14px}
+.feed-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0f5fa;align-items:flex-start}
+.feed-item:last-child{border-bottom:none}
+.fi-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dot-g{background:var(--cg)}
+.dot-b{background:var(--cb)}
+.dot-o{background:var(--co)}
+.fi-text{font-size:12px;color:var(--ct);line-height:1.5}
+.fi-meta{font-size:10px;color:var(--cm);margin-top:2px}
+.fi-expand{font-size:11px;color:var(--cb);background:none;border:none;cursor:pointer;padding:2px 0;margin-top:3px;display:block;text-align:left}
+.fi-expand:hover{text-decoration:underline}
+.fi-data{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:3px 16px}
+.fi-kv-k{color:var(--cm)}
+.fi-kv-v{font-weight:600;color:var(--ct)}
+
+.success-banner{background:var(--cgl);border:1px solid var(--cg);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-top:8px}
+.success-icon{width:20px;height:20px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.success-text{font-size:12px;color:var(--cgd);font-weight:500;line-height:1.4}
+
+.sidebar{display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.card-hd{background:var(--cb);padding:8px 12px;font-size:12px;font-weight:600;color:#fff}
+.card-body{padding:10px 12px}
+.kv{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f5fa}
+.kv:last-child{border-bottom:none}
+.kv-k{color:var(--cm)}
+.kv-v{font-weight:600;color:var(--ct);text-align:right}
+.comp-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f5fa}
+.comp-row:last-child{border-bottom:none}
+.pill{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.pill-pass{background:var(--cgl);color:var(--cgd)}
+
+.next-card{background:var(--cgl);border:1.5px solid var(--cg);border-radius:8px;overflow:hidden}
+.next-hd{background:var(--cg);padding:8px 12px}
+.next-hd-txt{font-size:12px;font-weight:700;color:#fff}
+.next-body{padding:10px 12px}
+.next-desc{font-size:11px;color:var(--cgd);line-height:1.5}
+
+/* RULES PAGE */
+.rules-wrap{padding:12px 16px}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rule-input-card{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.ri-hd{background:var(--cn);padding:10px 14px;font-size:12px;font-weight:600;color:#fff}
+.ri-body{padding:12px 14px}
+.form-row{margin-bottom:10px}
+.form-label{font-size:11px;font-weight:600;color:var(--cm);margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.5px}
+.form-select{width:100%;padding:7px 10px;font-size:12px;border:1px solid var(--cborder);border-radius:6px;color:var(--ct);background:#fff;outline:none}
+.form-select:focus{border-color:var(--cb)}
+.form-input{width:100%;padding:7px 10px;font-size:12px;border:1px solid var(--cborder);border-radius:6px;color:var(--ct);outline:none}
+.form-input:focus{border-color:var(--cb)}
+.form-textarea{width:100%;padding:7px 10px;font-size:12px;border:1px solid var(--cborder);border-radius:6px;color:var(--ct);height:68px;resize:none;outline:none;font-family:inherit}
+.form-textarea:focus{border-color:var(--cb)}
+.btn-run{background:var(--cb);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:600;padding:8px 20px;cursor:pointer;width:100%}
+.btn-run:hover{background:var(--cbd)}
+.rule-results{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.rr-hd{background:var(--cb);padding:10px 14px;font-size:12px;font-weight:600;color:#fff;display:flex;gap:8px;align-items:center}
+.rr-body{padding:12px 14px}
+.rule-trace-item{padding:8px 10px;border-radius:6px;margin-bottom:6px;font-size:11px;line-height:1.5}
+.rt-pass{background:var(--cgl);border-left:3px solid var(--cg)}
+.rt-fail{background:var(--crl);border-left:3px solid var(--cr)}
+.rt-warn{background:var(--cwl);border-left:3px solid var(--co)}
+.rt-label{font-weight:700;margin-bottom:2px}
+.rt-detail{color:var(--cm)}
+.rule-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cbg);border:1px solid var(--cborder);border-radius:16px;padding:3px 10px;font-size:11px;margin:3px;cursor:pointer;color:var(--ct)}
+.rule-chip:hover{border-color:var(--cb);color:var(--cb)}
+.rule-chip-dot{width:7px;height:7px;border-radius:50%}
+</style>
+
+<div>
+
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="9" r="5" fill="#0080C9"/>
+        <rect x="13.5" y="13" width="5" height="11" rx="2" fill="#0080C9"/>
+        <ellipse cx="10" cy="10" rx="4" ry="2.2" fill="#52BB40" transform="rotate(-35 10 10)"/>
+        <ellipse cx="22" cy="10" rx="4" ry="2.2" fill="#52BB40" transform="rotate(35 22 10)"/>
+        <ellipse cx="16" cy="7" rx="4.5" ry="1.8" fill="#52BB40"/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">Cigna <span>S2S Agentic Platform</span></div>
+  </div>
+  <div class="nav-tab active" id="tab-pipeline" onclick="showPage('pipeline')">Pipeline</div>
+  <div class="nav-tab" id="tab-rules" onclick="showPage('rules')">Rules executor</div>
+  <div class="nav-tab" id="tab-audit">Audit log</div>
+  <div class="nav-tab" id="tab-settings">Settings</div>
+  <div class="nav-right">
+    <span>U500 · Medical</span>
+    <span class="nav-badge">LIVE POC</span>
+  </div>
+</div>
+
+<!-- ═══ PIPELINE PAGE ═══ -->
+<div id="page-pipeline">
+
+<div class="subheader">
+  <span class="subheader-title">Sale-to-Setup orchestration</span>
+  <span class="subheader-sep">/</span>
+  <span class="subheader-sub">Active cases: 4</span>
+  <span class="subheader-pill">Facets track · Pre-sale scope</span>
+</div>
+
+<div class="pipeline-wrap">
+  <div class="case-tabs">
+    <span class="case-tab active">Additive LLC</span>
+    <span class="case-tab">C&amp;W Pizza Co.</span>
+    <span class="case-tab">Brightfield Group</span>
+    <span class="case-tab">Redwood Partners</span>
+    <span class="case-tab" style="border-style:dashed">+ new case</span>
+  </div>
+  <div class="pipeline">
+    <div class="p-step done mock">
+      <div class="p-num">01</div>
+      <div class="p-name">RFP intake</div>
+      <span class="p-badge pb-mock">mocked</span>
+    </div>
+    <div class="p-step active">
+      <div class="p-num">02</div>
+      <div class="p-name">Initial proposal</div>
+      <span class="p-badge pb-running">running</span>
+    </div>
+    <div class="p-step mock">
+      <div class="p-num">03</div>
+      <div class="p-name">Sales negotiation</div>
+      <span class="p-badge pb-mock">mocked</span>
+    </div>
+    <div class="p-step">
+      <div class="p-num">04</div>
+      <div class="p-name">Client intent</div>
+      <span class="p-badge pb-pending">pending</span>
+    </div>
+    <div class="p-step">
+      <div class="p-num">05</div>
+      <div class="p-name">Install</div>
+      <span class="p-badge pb-pending">pending</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="feed">
+    <div class="feed-header">
+      <div class="spinner"></div>
+      <span class="feed-header-title">Agent activity — stage 2: initial proposal creation</span>
+      <span class="feed-header-status">09:02:18 · 2 agents active</span>
+    </div>
+    <div class="feed-body">
+
+      <div class="feed-item">
+        <div class="fi-dot dot-g"></div>
+        <div>
+          <div class="fi-text">RFP packet received — <strong>Additive LLC</strong>. Account created in Salesforce. Opportunity object populated.</div>
+          <div class="fi-meta">09:01:04 · RFP intake agent (mocked)</div>
+        </div>
+      </div>
+
+      <div class="feed-item">
+        <div class="fi-dot dot-b"></div>
+        <div>
+          <div class="fi-text">Census analysis complete. 312 lives identified. Incumbent carrier: Aetna (PPO).</div>
+          <button class="fi-expand" id="census-btn" onclick="toggleCensus()">Show census stats</button>
+          <div class="fi-data" id="census-data" style="display:none">
+            <span class="fi-kv-k">Total lives</span><span class="fi-kv-v">312</span>
+            <span class="fi-kv-k">Subscriber / family</span><span class="fi-kv-v">68% / 32%</span>
+            <span class="fi-kv-k">Avg age</span><span class="fi-kv-v">38.4</span>
+            <span class="fi-kv-k">Incumbent</span><span class="fi-kv-v">Aetna PPO</span>
+            <span class="fi-kv-k">Incumbent premium</span><span class="fi-kv-v">$842 PEPM</span>
+            <span class="fi-kv-k">Cigna estimate</span><span class="fi-kv-v">$553 PEPM</span>
+          </div>
+          <div class="fi-meta">09:01:12 · UW proposal agent</div>
+        </div>
+      </div>
+
+      <div class="feed-item">
+        <div class="fi-dot dot-b"></div>
+        <div>
+          <div class="fi-text">Product availability checked via Contour. 3 plan options identified: PPO Gold, HDHP Silver, HMO Basic.</div>
+          <div class="fi-meta">09:01:22 · UW proposal agent → Contour</div>
+        </div>
+      </div>
+
+      <div class="feed-item">
+        <div class="fi-dot dot-g"></div>
+        <div>
+          <div class="fi-text">Eligibility confirmed. No exceptions found. Benefit creation proceeding. Initial compliant quote packages being assembled.</div>
+          <div class="fi-meta">09:01:35 · UW proposal agent</div>
+        </div>
+      </div>
+
+      <div class="feed-item">
+        <div class="fi-dot dot-o"></div>
+        <div>
+          <div class="fi-text">Shift Left rules check initiated. Situs state: <strong>NY</strong>. Validating against PBAB — 2,000 compliance rules.</div>
+          <button class="fi-expand" onclick="showPage('rules')">Open rules executor</button>
+          <div class="fi-meta">09:01:44 · Rules agent → PBAB</div>
+        </div>
+      </div>
+
+      <div class="feed-item">
+        <div class="fi-dot dot-g"></div>
+        <div>
+          <div class="fi-text">Compliance check complete. All rules passed. Initial compliant quote generated (PPO Gold, HDHP Silver, HMO Basic). Notifying MCP server — downstream systems updated.</div>
+          <div class="fi-meta">09:02:03 · Rules agent · Orchestration agent</div>
+        </div>
+      </div>
+
+      <div class="feed-item">
+        <div class="fi-dot dot-g"></div>
+        <div>
+          <div class="fi-text"><strong>Stage 2 complete.</strong> Initial compliant quote sent to underwriter for standard review. No exceptions or compliance flags raised. Proceeding to Sales negotiation (mocked).</div>
+          <div class="fi-meta">09:02:18 · Orchestration agent</div>
+          <div class="success-banner">
+            <div class="success-icon">✓</div>
+            <div class="success-text">Happy path — no HITL required. Pipeline continuing automatically to stage 3.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sidebar">
+
+    <div class="card">
+      <div class="card-hd">Case summary — Additive LLC</div>
+      <div class="card-body">
+        <div class="kv"><span class="kv-k">Account</span><span class="kv-v">Additive LLC</span></div>
+        <div class="kv"><span class="kv-k">Lives</span><span class="kv-v">312</span></div>
+        <div class="kv"><span class="kv-k">Situs state</span><span class="kv-v">NY</span></div>
+        <div class="kv"><span class="kv-k">Incumbent</span><span class="kv-v">Aetna (PPO)</span></div>
+        <div class="kv"><span class="kv-k">Lines of business</span><span class="kv-v">Medical</span></div>
+        <div class="kv"><span class="kv-k">Broker tier</span><span class="kv-v">National</span></div>
+        <div class="kv"><span class="kv-k">Track</span><span class="kv-v">Facets · U500</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">Compliance check — NY situs</div>
+      <div class="card-body">
+        <div class="comp-row"><span>Mental health parity (MHP)</span><span class="pill pill-pass">pass</span></div>
+        <div class="comp-row"><span>Situs mandate NY §3216</span><span class="pill pill-pass">pass</span></div>
+        <div class="comp-row"><span>Preventive care coverage</span><span class="pill pill-pass">pass</span></div>
+        <div class="comp-row"><span>Small group limits</span><span class="pill pill-pass">pass</span></div>
+        <div class="comp-row"><span>GLP-1 coverage standard</span><span class="pill pill-pass">pass</span></div>
+      </div>
+    </div>
+
+    <div class="next-card">
+      <div class="next-hd">
+        <span class="next-hd-txt">Next: Sales negotiation (stage 3)</span>
+      </div>
+      <div class="next-body">
+        <div class="next-desc">All checks passed. Orchestration agent is handing off to the Sales negotiation agent. Iterative loop with broker will be mocked. Final compliant quote will be produced automatically.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══ RULES PAGE ═══ -->
+<div id="page-rules" style="display:none">
+
+<div class="subheader">
+  <span class="subheader-title">Rules executor</span>
+  <span class="subheader-sep">/</span>
+  <span class="subheader-sub">Test, inspect and manage compliance rules</span>
+  <span class="subheader-pill">PBAB · State mandates · BST</span>
+</div>
+
+<div class="rules-wrap">
+  <div class="rules-grid">
+    <div class="rule-input-card">
+      <div class="ri-hd">Run a rule check</div>
+      <div class="ri-body">
+        <div class="form-row">
+          <label class="form-label">Situs state</label>
+          <select class="form-select" id="rule-state">
+            <option>NY — New York</option>
+            <option>CA — California</option>
+            <option>TX — Texas</option>
+            <option>FL — Florida</option>
+            <option>IL — Illinois</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Rule category</label>
+          <select class="form-select" id="rule-cat">
+            <option>Mental health parity (MHP)</option>
+            <option>Situs mandate</option>
+            <option>GLP-1 coverage</option>
+            <option>Preventive care</option>
+            <option>Non-standard benefit</option>
+            <option>Small group limits</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Benefit value / plan detail</label>
+          <input class="form-input" id="rule-benefit" placeholder="e.g. PPO Gold, $1500 deductible" value="PPO Gold, MH parity 1:1, NY situs">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Additional context (optional)</label>
+          <textarea class="form-textarea" id="rule-context" placeholder="Paste plan excerpt, exception history, or PBAB note..."></textarea>
+        </div>
+        <button class="btn-run" onclick="runRule()">Run compliance check</button>
+      </div>
+    </div>
+
+    <div class="rule-results">
+      <div class="rr-hd">
+        <span>Check results</span>
+        <span id="rr-status" style="font-size:10px;font-weight:400;margin-left:auto;color:rgba(255,255,255,.7)">Awaiting input</span>
+      </div>
+      <div class="rr-body" id="rr-body">
+        <div style="font-size:12px;color:var(--cm);padding:12px 0;text-align:center">Run a check to see results here</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <div class="card">
+      <div class="card-hd">Rule repository — active rules</div>
+      <div class="card-body">
+        <div style="font-size:11px;color:var(--cm);margin-bottom:8px">Click any rule to load it into the executor above</div>
+        <div>
+          <span class="rule-chip" onclick="loadRule('MHP')"><span class="rule-chip-dot" style="background:var(--cg)"></span>NY-MHP-001 Mental health parity</span>
+          <span class="rule-chip" onclick="loadRule('SITUS')"><span class="rule-chip-dot" style="background:var(--cg)"></span>NY-SIT-002 Situs §3216 mandate</span>
+          <span class="rule-chip" onclick="loadRule('GLP1')"><span class="rule-chip-dot" style="background:var(--cr)"></span>NY-GLP-003 GLP-1 coverage</span>
+          <span class="rule-chip" onclick="loadRule('PREV')"><span class="rule-chip-dot" style="background:var(--cg)"></span>NY-PRV-004 Preventive care</span>
+          <span class="rule-chip" onclick="loadRule('NONSTD')"><span class="rule-chip-dot" style="background:var(--co)"></span>NY-NSB-005 Non-standard benefit</span>
+          <span class="rule-chip" onclick="loadRule('SMALL')"><span class="rule-chip-dot" style="background:var(--co)"></span>NY-SGL-006 Small group limits</span>
+          <span class="rule-chip"><span class="rule-chip-dot" style="background:var(--cb)"></span>CA-MHP-001 CA parity rule</span>
+          <span class="rule-chip"><span class="rule-chip-dot" style="background:var(--cb)"></span>TX-SIT-001 TX situs mandate</span>
+          <span class="rule-chip"><span class="rule-chip-dot" style="background:var(--cm)"></span>+ 1,992 more in PBAB</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+<script>
+function showPage(p){
+  document.getElementById('page-pipeline').style.display=p==='pipeline'?'block':'none';
+  document.getElementById('page-rules').style.display=p==='rules'?'block':'none';
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(p==='pipeline')document.getElementById('tab-pipeline').classList.add('active');
+  if(p==='rules')document.getElementById('tab-rules').classList.add('active');
+}
+
+function toggleCensus(){
+  var el=document.getElementById('census-data');
+  var btn=document.getElementById('census-btn');
+  var hidden=el.style.display==='none';
+  el.style.display=hidden?'grid':'none';
+  btn.textContent=hidden?'Hide census stats':'Show census stats';
+}
+
+var ruleResults={
+  MHP:{status:'pass',items:[
+    {cls:'rt-pass',label:'NY MHP-001 — Mental health parity',detail:'Plan provides 1:1 parity for mental health vs medical benefits. Passes §3221(l)(5).'},
+    {cls:'rt-pass',label:'Substance use disorder coverage',detail:'SUD benefits meet or exceed medical/surgical equivalent. Compliant.'},
+    {cls:'rt-warn',label:'Out-of-network MH parity',detail:'OON mental health cost-sharing is 5% above medical equivalents. Review recommended.'}
+  ]},
+  GLP1:{status:'fail',items:[
+    {cls:'rt-fail',label:'NY GLP-1 coverage standard',detail:'NY requires GLP-1 coverage for obesity treatment from 2024. Plan currently excludes weight-loss indication.'},
+    {cls:'rt-fail',label:'BMI threshold applicability',detail:'Standard applies to members with BMI ≥ 30 or BMI ≥ 27 with comorbidity. Not covered in current benefit design.'},
+    {cls:'rt-pass',label:'Diabetes GLP-1 indication',detail:'Diabetes-indicated GLP-1 is covered. Compliant for this indication only.'}
+  ]},
+  SITUS:{status:'pass',items:[
+    {cls:'rt-pass',label:'NY §3216 situs check',detail:'Plan situs confirmed as NY. All NY-specific mandates apply and have been validated.'},
+    {cls:'rt-pass',label:'Multi-state applicability',detail:'NY rules apply to all NY-situs employees regardless of work location.'}
+  ]},
+  NONSTD:{status:'warn',items:[
+    {cls:'rt-warn',label:'Non-standard benefit approval required',detail:'Plan includes chiropractic benefit exceeding standard Cigna offering. Requires PBAB exception approval.'},
+    {cls:'rt-pass',label:'Acupuncture rider',detail:'Acupuncture benefit within approved parameters. No exception needed.'}
+  ]},
+  PREV:{status:'pass',items:[
+    {cls:'rt-pass',label:'ACA preventive care §2713',detail:'All USPSTF Grade A/B services covered at $0 cost-sharing. Compliant.'},
+    {cls:'rt-pass',label:'Immunizations',detail:'ACIP-recommended vaccines covered at 100%. Compliant.'}
+  ]},
+  SMALL:{status:'warn',items:[
+    {cls:'rt-warn',label:'Small group limits',detail:'312 lives falls in the 250–499 band. Verify correct rating methodology is applied.'},
+    {cls:'rt-pass',label:'Benefit richness index',detail:'Actuarial value within acceptable range for this group size.'}
+  ]}
+};
+
+function runRule(){
+  var cat=document.getElementById('rule-cat').value;
+  var key='MHP';
+  if(cat.includes('GLP'))key='GLP1';
+  else if(cat.includes('Situs'))key='SITUS';
+  else if(cat.includes('Non-standard'))key='NONSTD';
+  else if(cat.includes('Preventive'))key='PREV';
+  else if(cat.includes('Small'))key='SMALL';
+  var res=ruleResults[key];
+  var sc={pass:'var(--cg)',fail:'var(--cr)',warn:'var(--co)'};
+  document.getElementById('rr-status').textContent='Result: '+res.status.toUpperCase();
+  document.getElementById('rr-status').style.color=sc[res.status];
+  document.getElementById('rr-body').innerHTML=res.items.map(function(i){
+    return '<div class="rule-trace-item '+i.cls+'"><div class="rt-label">'+i.label+'</div><div class="rt-detail">'+i.detail+'</div></div>';
+  }).join('');
+}
+
+function loadRule(key){
+  var map={
+    MHP:['NY — New York','Mental health parity (MHP)','PPO Gold, MH parity 1:1, NY situs'],
+    GLP1:['NY — New York','GLP-1 coverage','PPO Gold, GLP-1 obesity indication excluded'],
+    SITUS:['NY — New York','Situs mandate','Situs state NY, all employees'],
+    NONSTD:['NY — New York','Non-standard benefit','Chiropractic rider, 30 visits/year'],
+    PREV:['NY — New York','Preventive care','USPSTF Grade A/B, $0 cost-share'],
+    SMALL:['NY — New York','Small group limits','312 lives, 250-499 band']
+  };
+  var d=map[key];
+  if(!d)return;
+  document.getElementById('rule-state').value=d[0];
+  document.getElementById('rule-cat').value=d[1];
+  document.getElementById('rule-benefit').value=d[2];
+  showPage('rules');
+  runRule();
+}
+</script>
