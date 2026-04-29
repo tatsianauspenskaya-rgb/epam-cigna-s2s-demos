@@ -1,0 +1,411 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cb:#0080C9;--cbd:#005f96;--cbl:#e6f4fb;
+  --cg:#52BB40;--cgd:#3a8a2d;--cgl:#eaf7e6;
+  --co:#FA9800;--col:#fff3e0;
+  --cn:#003865;--ct:#1a2b3c;--cm:#5a6e82;
+  --cborder:#cce0f0;--cbg:#f4f8fc;
+  --cr:#c0392b;--crl:#fdf0ee;--cwo:#e67e00;--cwl:#fff8ed;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ct);background:var(--cbg)}
+.nav{background:var(--cn);padding:0 16px;display:flex;align-items:stretch}
+.nav-brand{display:flex;align-items:center;gap:10px;padding:12px 16px 12px 0;border-right:1px solid rgba(255,255,255,.15);margin-right:8px}
+.nav-logo{width:32px;height:32px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:26px;height:26px}
+.nav-wordmark{font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px}
+.nav-wordmark span{color:var(--cg);font-weight:400;font-size:11px;display:block;letter-spacing:.3px;margin-top:-2px}
+.nav-tab{padding:0 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;display:flex;align-items:center;border-bottom:3px solid transparent}
+.nav-tab.active{color:#fff;border-bottom-color:var(--cg)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6)}
+.nav-badge{background:var(--cg);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.subheader{background:var(--cb);padding:10px 16px;display:flex;align-items:center;gap:12px}
+.sh-title{font-size:13px;font-weight:600;color:#fff}
+.sh-sep{color:rgba(255,255,255,.4)}
+.sh-sub{font-size:12px;color:rgba(255,255,255,.8)}
+.sh-pill{background:rgba(255,255,255,.15);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:auto}
+.pipeline-wrap{background:#fff;border-bottom:1px solid var(--cborder);padding:12px 16px}
+.case-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.case-tab{background:var(--cbg);border:1px solid var(--cborder);border-radius:16px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--cm)}
+.case-tab.active{background:var(--cbl);border-color:var(--cb);color:var(--cbd);font-weight:600}
+.pipeline{display:flex}
+.p-step{flex:1;padding:8px 10px;border:1px solid var(--cborder);background:var(--cbg);cursor:pointer;text-align:center}
+.p-step:first-child{border-radius:8px 0 0 8px}
+.p-step:last-child{border-radius:0 8px 8px 0}
+.p-step+.p-step{border-left:none}
+.p-step.done{background:var(--cgl);border-color:var(--cg)}
+.p-step.active{background:var(--cbl);border-color:var(--cb);border-width:1.5px}
+.p-step.mock{opacity:.65}
+.p-num{font-size:10px;color:var(--cm);margin-bottom:2px}
+.p-name{font-size:11px;font-weight:600;color:var(--ct)}
+.p-badge{font-size:9px;padding:2px 5px;border-radius:8px;margin-top:3px;display:inline-block}
+.pb-done{background:var(--cgl);color:var(--cgd)}
+.pb-running{background:var(--cbl);color:var(--cbd)}
+.pb-mock{background:#efefef;color:#888}
+.pb-pending{background:#f0f0f0;color:#888}
+.stage-tabs{display:flex;border-bottom:2px solid var(--cborder);background:#fff;padding:0 16px}
+.stage-tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--cm);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.stage-tab.active{color:var(--cb);border-bottom-color:var(--cb);font-weight:600}
+.stage-tab.done-tab{color:var(--cgd)}
+.happy-banner{background:var(--cgl);border-left:4px solid var(--cg);border-radius:0 6px 6px 0;padding:10px 14px;margin:12px 16px 0;display:flex;align-items:flex-start;gap:10px}
+.hb-icon{width:22px;height:22px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px}
+.hb-title{font-size:12px;font-weight:700;color:var(--cgd);margin-bottom:3px}
+.hb-desc{font-size:11px;color:var(--cgd);line-height:1.6}
+.fc{font-family:monospace;font-size:10px;background:var(--cbl);color:var(--cb);padding:1px 4px;border-radius:3px;white-space:nowrap}
+.main{display:grid;grid-template-columns:1fr 300px;gap:12px;padding:12px 16px}
+.feed{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.feed-header{background:var(--cn);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.fh-title{font-size:12px;font-weight:600;color:#fff}
+.fh-status{font-size:11px;color:rgba(255,255,255,.65);margin-left:auto}
+.spinner{width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.feed-body{padding:12px 14px}
+.fi{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0f5fa;align-items:flex-start}
+.fi:last-child{border-bottom:none}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dg{background:var(--cg)}.db{background:var(--cb)}.do{background:var(--co)}
+.fi-text{font-size:12px;color:var(--ct);line-height:1.5}
+.fi-meta{font-size:10px;color:var(--cm);margin-top:2px}
+.expbtn{font-size:11px;color:var(--cb);background:none;border:none;cursor:pointer;padding:2px 0;margin-top:3px;display:block}
+.expbtn:hover{text-decoration:underline}
+.fi-grid{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:3px 16px}
+.gk{color:var(--cm)}.gv{font-weight:600;color:var(--ct)}
+.fi-list{background:var(--cbg);border:1px solid var(--cborder);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px}
+.fi-li{padding:4px 0;border-bottom:1px solid var(--cborder);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.fi-li:last-child{border-bottom:none}
+.tg{background:var(--cgl);color:var(--cgd);font-size:10px;padding:1px 6px;border-radius:8px;font-weight:600}
+.ok-banner{background:var(--cgl);border:1px solid var(--cg);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-top:8px}
+.ok-icon{width:20px;height:20px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+.ok-text{font-size:12px;color:var(--cgd);font-weight:500;line-height:1.4}
+.sidebar{display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid var(--cborder);border-radius:8px;overflow:hidden}
+.card-hd{background:var(--cb);padding:8px 12px;font-size:12px;font-weight:600;color:#fff}
+.card-body{padding:10px 12px}
+.kv{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f5fa;align-items:center;gap:6px}
+.kv:last-child{border-bottom:none}
+.kk{color:var(--cm);flex-shrink:0}
+.kv-v{font-weight:600;color:var(--ct);text-align:right}
+.kv-g{font-weight:600;color:var(--cgd);text-align:right}
+.next-card{background:var(--cgl);border:1.5px solid var(--cg);border-radius:8px;overflow:hidden}
+.next-hd{background:var(--cg);padding:8px 12px}
+.next-hd-txt{font-size:12px;font-weight:700;color:#fff}
+.next-body{padding:10px 12px;font-size:11px;color:var(--cgd);line-height:1.5}
+</style>
+
+<div>
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="9" r="5" fill="#0080C9"/>
+        <rect x="13.5" y="13" width="5" height="11" rx="2" fill="#0080C9"/>
+        <ellipse cx="10" cy="10" rx="4" ry="2.2" fill="#52BB40" transform="rotate(-35 10 10)"/>
+        <ellipse cx="22" cy="10" rx="4" ry="2.2" fill="#52BB40" transform="rotate(35 22 10)"/>
+        <ellipse cx="16" cy="7" rx="4.5" ry="1.8" fill="#52BB40"/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">Cigna <span>S2S Agentic Platform</span></div>
+  </div>
+  <div class="nav-tab active">Pipeline</div>
+  <div class="nav-tab">Rules executor</div>
+  <div class="nav-tab">Audit log</div>
+  <div class="nav-tab">Settings</div>
+  <div class="nav-right"><span>U500 · Medical</span><span class="nav-badge">LIVE POC</span></div>
+</div>
+
+<div class="subheader">
+  <span class="sh-title">Sale-to-Setup orchestration</span>
+  <span class="sh-sep">/</span>
+  <span class="sh-sub">Active cases: 4</span>
+  <span class="sh-pill">Facets track · Pre-sale scope</span>
+</div>
+
+<div class="pipeline-wrap">
+  <div class="case-tabs">
+    <span class="case-tab active">Plans &amp; Specs LLC</span>
+    <span class="case-tab">C&amp;W Pizza LLC</span>
+    <span class="case-tab">Atlantic Coast Mortgage</span>
+    <span class="case-tab">OSS Tactical LLC</span>
+    <span class="case-tab" style="border-style:dashed">+ new case</span>
+  </div>
+  <div class="pipeline">
+    <div class="p-step done mock"><div class="p-num">01</div><div class="p-name">RFP intake</div><span class="p-badge pb-mock">mocked</span></div>
+    <div class="p-step done"><div class="p-num">02</div><div class="p-name">Initial proposal</div><span class="p-badge pb-done">complete</span></div>
+    <div class="p-step done mock"><div class="p-num">03</div><div class="p-name">Sales negotiation</div><span class="p-badge pb-mock">mocked</span></div>
+    <div class="p-step active"><div class="p-num">04</div><div class="p-name">Client intent</div><span class="p-badge pb-running">running</span></div>
+    <div class="p-step"><div class="p-num">05</div><div class="p-name">Install</div><span class="p-badge pb-pending">pending</span></div>
+  </div>
+</div>
+
+<div class="stage-tabs">
+  <div class="stage-tab done-tab">02 · Initial proposal</div>
+  <div class="stage-tab done-tab">03 · Sales negotiation</div>
+  <div class="stage-tab active">04 · Client intent</div>
+  <div class="stage-tab">05 · Install</div>
+</div>
+
+<!-- ─── HAPPY PATH BANNER ─── -->
+<div class="happy-banner">
+  <div class="hb-icon">✓</div>
+  <div>
+    <div class="hb-title">Happy path — no HITL triggered</div>
+    <div class="hb-desc">
+      The Client Intent agent assembled the full client record for Plans &amp; Specs LLC without any exceptions.
+      NCQ data was sourced from <span class="fc">C&amp;W Pizza, LLC - Filled_NCQ.docx</span> as the template.
+      Account, structure, contacts, eligibility provisions and plan setup were populated via
+      <span class="fc">external-client-record-openapi-intent-only.json</span> (Client Companion API v0.1.0)
+      using files from <span class="fc">Client Record.zip</span> — 8 sub-documents.
+      A human observer was notified but no approval was required.
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ─── ACTIVITY FEED ─── -->
+  <div class="feed">
+    <div class="feed-header">
+      <div class="spinner"></div>
+      <span class="fh-title">Agent activity — stage 4: client intent</span>
+      <span class="fh-status">11:17:44 · 1 agent active</span>
+    </div>
+    <div class="feed-body">
+
+      <!-- Step 1: Inputs received -->
+      <div class="fi"><div class="dot dg"></div><div>
+        <div class="fi-text">Final Compliant Quote received from stage 3. NCQ data loaded. Client intent assembly starting for <strong>Plans &amp; Specs LLC</strong> (OP-10004316, account <strong>0125757</strong>).</div>
+        <div class="fi-list" style="margin-top:6px">
+          <div class="fi-li"><span>NCQ template</span><span class="fc">C&amp;W Pizza, LLC - Filled_NCQ.docx</span><span class="tg">loaded</span></div>
+          <div class="fi-li"><span>Client Companion API spec</span><span class="fc">external-client-record-openapi-intent-only.json</span><span class="tg">loaded</span></div>
+          <div class="fi-li"><span>Client record bundle</span><span class="fc">Client Record.zip</span><span class="tg">8 files</span></div>
+        </div>
+        <div class="fi-meta">11:14:25 · Client intent agent</div>
+      </div></div>
+
+      <!-- Step 2: NCQ extraction -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">NCQ fields extracted from template <span class="fc">C&amp;W Pizza, LLC - Filled_NCQ.docx</span>. Company info, plan administrator contacts, plan setup parameters and contribution rules parsed.</div>
+        <button class="expbtn" id="ncq-btn" onclick="tog('ncq-data','ncq-btn','Show NCQ summary','Hide NCQ summary')">Show NCQ summary</button>
+        <div class="fi-grid" id="ncq-data" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">C&amp;W Pizza, LLC - Filled_NCQ.docx</span>
+          <span class="gk">Legal company name</span><span class="gv">S2S Test1, LLC</span>
+          <span class="gk">DBA</span><span class="gv">S2S Test1</span>
+          <span class="gk">Tax ID</span><span class="gv">81-5252187</span>
+          <span class="gk">Company type</span><span class="gv">LLC</span>
+          <span class="gk">Employees</span><span class="gv">190</span>
+          <span class="gk">Fiscal year begins</span><span class="gv">April</span>
+          <span class="gk">EHB state</span><span class="gv">TN</span>
+          <span class="gk">ERISA compliant</span><span class="gv">No</span>
+          <span class="gk">Plan year accumulation</span><span class="gv">Plan Year</span>
+          <span class="gk">Plan admin contact</span><span class="gv">John DOE CARRIGAN (Owner)</span>
+          <span class="gk">HR admin</span><span class="gv">Test ARMSTRONG (HR Advisor)</span>
+          <span class="gk">Employer contribution (EE)</span><span class="gv">82%</span>
+          <span class="gk">Employer contribution (DEP)</span><span class="gv">72%</span>
+          <span class="gk">CFE portal management</span><span class="gv">Cigna Managed</span>
+          <span class="gk">Non-English speaking</span><span class="gv">None</span>
+        </div>
+        <div class="fi-meta">11:14:32 · Client intent agent → NCQ parser</div>
+      </div></div>
+
+      <!-- Step 3: Account record -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Account information assembled via Client Companion API — <code style="font-size:10px">PUT /v1/client-companion/intent/account</code>. Sourced from <span class="fc">accountinformation.json</span> (Client Record.zip).</div>
+        <button class="expbtn" id="acct-btn" onclick="tog('acct-data','acct-btn','Show account record','Hide account record')">Show account record</button>
+        <div class="fi-grid" id="acct-data" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">accountinformation.json</span>
+          <span class="gk">Account number</span><span class="gv">0125757</span>
+          <span class="gk">Legal name</span><span class="gv">Plans &amp; Specs LLC</span>
+          <span class="gk">Situs state</span><span class="gv">IN</span>
+          <span class="gk">SIC code</span><span class="gv">9999 — Non-Classifiable</span>
+          <span class="gk">Transaction eff. date</span><span class="gv">2026-09-01</span>
+          <span class="gk">Sales office</span><span class="gv">Columbus</span>
+          <span class="gk">ERISA compliant</span><span class="gv">Yes (confirmed)</span>
+          <span class="gk">Section 125</span><span class="gv">No</span>
+          <span class="gk">Digital ID cards</span><span class="gv">No</span>
+          <span class="gk">Subgroup ID</span><span class="gv">0001</span>
+        </div>
+        <div class="fi-meta">11:14:45 · Client intent agent → Client Companion API</div>
+      </div></div>
+
+      <!-- Step 4: Contacts -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Contacts loaded via <code style="font-size:10px">PUT /v1/client-companion/intent/contact</code>. Sourced from <span class="fc">contacts.json</span> (Client Record.zip). 3 contacts identified: Sales Rep, Dental Sales Exec, Client Service Consultant.</div>
+        <button class="expbtn" id="con-btn" onclick="tog('con-data','con-btn','Show contacts','Hide contacts')">Show contacts</button>
+        <div class="fi-list" id="con-data" style="display:none">
+          <div class="fi-li"><span><strong>Eliza Delaughter</strong> — Existing Business Sales Rep</span><span class="fc">contacts.json</span></div>
+          <div class="fi-li"><span><strong>Perry Baines</strong> — Dental Sales Executive</span><span class="fc">contacts.json</span></div>
+          <div class="fi-li"><span><strong>Traci Blake</strong> — Client Service Consultant</span><span class="fc">contacts.json</span></div>
+          <div class="fi-li"><span><strong>Mike Daniel</strong> — Broker of Record (Moss-Compton)</span><span class="fc">Opportunity_OP-10004316.json</span></div>
+        </div>
+        <div class="fi-meta">11:14:55 · Client intent agent → Client Companion API</div>
+      </div></div>
+
+      <!-- Step 5: Plan setup -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Plan setup configured via <code style="font-size:10px">PUT /v1/client-companion/intent/plansetup</code>. Sourced from <span class="fc">plansetup.json</span> (Client Record.zip). Broker agency and commission details confirmed.</div>
+        <button class="expbtn" id="ps-btn" onclick="tog('ps-data','ps-btn','Show plan setup','Hide plan setup')">Show plan setup</button>
+        <div class="fi-grid" id="ps-data" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">plansetup.json</span>
+          <span class="gk">Broker agency</span><span class="gv">Moss-Compton</span>
+          <span class="gk">Individual agent</span><span class="gv">Mike Daniel</span>
+          <span class="gk">Commission</span><span class="gv">6% Medical</span>
+          <span class="gk">Commission payable to</span><span class="gv">Moss-Compton</span>
+          <span class="gk">General agent</span><span class="gv">No</span>
+          <span class="gk">Your Health First</span><span class="gv">No</span>
+          <span class="gk">Run-in incentive</span><span class="gv">No</span>
+        </div>
+        <div class="fi-meta">11:15:05 · Client intent agent → Client Companion API</div>
+      </div></div>
+
+      <!-- Step 6: Eligibility provisions -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Eligibility provisions loaded via <code style="font-size:10px">PUT /v1/client-companion/intent/eligibilityprovisions</code>. Sourced from <span class="fc">eligibilityprovisions.json</span> (Client Record.zip). 49 eligible employees confirmed.</div>
+        <button class="expbtn" id="ep-btn" onclick="tog('ep-data','ep-btn','Show eligibility provisions','Hide eligibility provisions')">Show eligibility provisions</button>
+        <div class="fi-grid" id="ep-data" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">eligibilityprovisions.json</span>
+          <span class="gk">Initial eligible employees</span><span class="gv">49</span>
+          <span class="gk">Spouse coverage</span><span class="gv">Yes</span>
+          <span class="gk">Children coverage</span><span class="gv">Yes</span>
+          <span class="gk">Domestic partner</span><span class="gv">No</span>
+          <span class="gk">COBRA coverage</span><span class="gv">No</span>
+          <span class="gk">Retirees covered</span><span class="gv">No</span>
+          <span class="gk">Disabled employees</span><span class="gv">No</span>
+          <span class="gk">Open enrollment load</span><span class="gv">No</span>
+        </div>
+        <div class="fi-meta">11:15:15 · Client intent agent → Client Companion API</div>
+      </div></div>
+
+      <!-- Step 7: Benefit structure -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Benefit structure built via <code style="font-size:10px">PUT /v1/client-companion/intent/structure</code>. Sourced from <span class="fc">structure.json</span> (Client Record.zip). 3 benefit plans mapped across 2 admin classes in subgroup 0001.</div>
+        <button class="expbtn" id="str-btn" onclick="tog('str-data','str-btn','Show structure build','Hide structure build')">Show structure build</button>
+        <div class="fi-list" id="str-data" style="display:none">
+          <div class="fi-li"><span><strong>MEDICAL OAP</strong> — Plan 36610785 Sold 2024 OAP</span><span class="fc">structure.json</span><span class="tg">Admin Class A01</span></div>
+          <div class="fi-li"><span><strong>MEDICAL HSA OAP</strong> — Plan 36610709 HDHPQ Buy Up OAP</span><span class="fc">structure.json</span><span class="tg">Admin Class A01</span></div>
+          <div class="fi-li"><span><strong>MEDICAL LocalPlus</strong> — Plan 36610800 HDHPQ LCP Base</span><span class="fc">structure.json</span><span class="tg">Admin Class A02</span></div>
+        </div>
+        <div class="fi-meta">11:15:30 · Client intent agent → Client Companion API</div>
+      </div></div>
+
+      <!-- Step 8: BenSum -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">Benefit Summary confirmed from stage 3 output <span class="fc">OP-10004316_Bensum_doc.pdf</span>. BNCA (Benefit Notification Case Alert) issued — downstream install teams notified.</div>
+        <button class="expbtn" id="bs-btn" onclick="tog('bs-data','bs-btn','Show benefit summary','Hide benefit summary')">Show benefit summary</button>
+        <div class="fi-grid" id="bs-data" style="display:none">
+          <span class="gk">Source file</span><span class="gv" style="font-family:monospace;font-size:10px">OP-10004316_Bensum_doc.pdf</span>
+          <span class="gk">Plan</span><span class="gv">Facets Open Access Plus</span>
+          <span class="gk">MH/SA Hospital IP coinsurance</span><span class="gv">90% (IN tier)</span>
+          <span class="gk">Pharmacy package</span><span class="gv">Facets Enhanced</span>
+          <span class="gk">MHSA package</span><span class="gv">Facets &amp; AIMS Combined</span>
+          <span class="gk">Medical package</span><span class="gv">Facets Copay/Coinsurance</span>
+          <span class="gk">Plan year</span><span class="gv">09/01/2026 – 08/31/2027</span>
+        </div>
+        <div class="fi-meta">11:15:42 · Client intent agent → BST</div>
+      </div></div>
+
+      <!-- Step 9: ET Plans -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">ET Plans generated via mocked Proposal Builder API call. 3 ET plans created referencing benefit plan structures from <span class="fc">structure.json</span> and benefit details from <span class="fc">Benefit_Plan_details.txt</span>.</div>
+        <button class="expbtn" id="et-btn" onclick="togList('et-data','et-btn','Show ET plans','Hide ET plans')">Show ET plans</button>
+        <div class="fi-list" id="et-data" style="display:none">
+          <div class="fi-li"><span>Medical OAP — Facets Open Access Plus (OAPIN)</span><span class="fc">ET-2026-PSL-001</span><span class="tg">ready</span></div>
+          <div class="fi-li"><span>Medical HSA OAP — HDHPQ Buy Up OAP</span><span class="fc">ET-2026-PSL-002</span><span class="tg">ready</span></div>
+          <div class="fi-li"><span>Medical LocalPlus — HDHPQ LCP Base</span><span class="fc">ET-2026-PSL-003</span><span class="tg">ready</span></div>
+        </div>
+        <div class="fi-meta">11:16:05 · Client intent agent → Proposal Builder (mocked)</div>
+      </div></div>
+
+      <!-- Step 10: Page status approval -->
+      <div class="fi"><div class="dot db"></div><div>
+        <div class="fi-text">All Client Companion intent pages submitted for approval via <code style="font-size:10px">PUT /v1/client-companion/intent/approval</code>. Page status updated via <code style="font-size:10px">PUT /v1/client-companion/intent/page-status</code>. Human observer notified — no action required.</div>
+        <div class="fi-meta">11:17:02 · Client intent agent · Human observer notified</div>
+      </div></div>
+
+      <!-- Step 11: Complete -->
+      <div class="fi"><div class="dot dg"></div><div>
+        <div class="fi-text"><strong>Stage 4 complete.</strong> All 8 client record documents assembled and validated. ET plans ready. No discrepancies found across structure, eligibility, or benefit plan data. Handing off to Install agent.</div>
+        <div class="fi-meta">11:17:44 · Orchestration agent</div>
+        <div class="ok-banner">
+          <div class="ok-icon">✓</div>
+          <div class="ok-text">Happy path — no HITL required. Full client record validated via Client Companion API. Proceeding automatically to stage 5.</div>
+        </div>
+      </div></div>
+
+    </div>
+  </div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <div class="sidebar">
+
+    <div class="card">
+      <div class="card-hd">Client intent — input files</div>
+      <div class="card-body">
+        <div class="kv"><span class="kk">NCQ template</span><span class="fc">C&amp;W Pizza, LLC - Filled_NCQ.docx</span></div>
+        <div class="kv"><span class="kk">Client Companion API</span><span class="fc">external-client-record-openapi-intent-only.json</span></div>
+        <div class="kv"><span class="kk">Client record bundle</span><span class="fc">Client Record.zip</span></div>
+        <div class="kv"><span class="kk">Benefit summary</span><span class="fc">OP-10004316_Bensum_doc.pdf</span></div>
+        <div class="kv"><span class="kk">Benefit plan details</span><span class="fc">Benefit_Plan_details.txt</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">Client record — files used</div>
+      <div class="card-body">
+        <div class="kv"><span class="kk">Account info</span><span class="fc">accountinformation.json</span></div>
+        <div class="kv"><span class="kk">Contacts</span><span class="fc">contacts.json</span></div>
+        <div class="kv"><span class="kk">Plan setup</span><span class="fc">plansetup.json</span></div>
+        <div class="kv"><span class="kk">Eligibility</span><span class="fc">eligibilityprovisions.json</span></div>
+        <div class="kv"><span class="kk">Structure</span><span class="fc">structure.json</span></div>
+        <div class="kv"><span class="kk">Benefit plans</span><span class="fc">benefitplans.json</span></div>
+        <div class="kv"><span class="kk">Stop loss</span><span class="fc">stoploss.json</span></div>
+        <div class="kv"><span class="kk">Header sample</span><span class="fc">header-sample.json</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">Client intent — outputs</div>
+      <div class="card-body">
+        <div class="kv"><span class="kk">Account ID</span><span class="kv-g">0125757 · PSL</span></div>
+        <div class="kv"><span class="kk">Subgroup</span><span class="kv-g">0001 · Active</span></div>
+        <div class="kv"><span class="kk">Admin classes</span><span class="kv-g">A01, A02</span></div>
+        <div class="kv"><span class="kk">Benefit plans</span><span class="kv-g">3 plans mapped</span></div>
+        <div class="kv"><span class="kk">ET plans</span><span class="kv-g">3 ready</span></div>
+        <div class="kv"><span class="kk">Contacts loaded</span><span class="kv-g">4 contacts</span></div>
+        <div class="kv"><span class="kk">Broker verified</span><span class="kv-g">Mike Daniel · 6%</span></div>
+        <div class="kv"><span class="kk">HITL triggered</span><span class="kv-g">none</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">API calls made — Client Companion</div>
+      <div class="card-body" style="font-size:10px;font-family:monospace;color:var(--cm);line-height:1.8">
+        <div>PUT /intent/account</div>
+        <div>PUT /intent/contact</div>
+        <div>PUT /intent/plansetup</div>
+        <div>PUT /intent/eligibilityprovisions</div>
+        <div>PUT /intent/structure</div>
+        <div>PUT /intent/approval</div>
+        <div>PUT /intent/page-status</div>
+        <div style="margin-top:4px;color:var(--cgd);font-weight:600">All 7 calls → 200 OK</div>
+      </div>
+    </div>
+
+    <div class="next-card">
+      <div class="next-hd"><span class="next-hd-txt">Next: Install (stage 5)</span></div>
+      <div class="next-body">Client record and ET plans passed to Install agent. Facets system will be pre-filled via direct API. CIT skipped — direct Facets integration used.</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+function tog(dataId, btnId, showTxt, hideTxt){
+  var el=document.getElementById(dataId),btn=document.getElementById(btnId),h=el.style.display==='none';
+  el.style.display=h?'grid':'none';btn.textContent=h?hideTxt:showTxt;
+}
+function togList(dataId, btnId, showTxt, hideTxt){
+  var el=document.getElementById(dataId),btn=document.getElementById(btnId),h=el.style.display==='none';
+  el.style.display=h?'block':'none';btn.textContent=h?hideTxt:showTxt;
+}
+</script>
